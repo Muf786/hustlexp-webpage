@@ -1,5 +1,6 @@
 import React from 'react';
 import ParticleField from '../components/coming-soon/ParticleField';
+import CursorGlow from '../components/coming-soon/CursorGlow';
 import Hero from '../components/coming-soon/Hero';
 import Features from '../components/coming-soon/Features';
 import SocialProof from '../components/coming-soon/SocialProof';
@@ -12,6 +13,9 @@ export default function ComingSoon() {
     <div className="relative min-h-screen bg-[#0F0514] overflow-hidden">
       {/* Animated Particle Background */}
       <ParticleField />
+      
+      {/* Custom Cursor Glow */}
+      <CursorGlow />
 
       {/* Main Content */}
       <div className="relative z-10">

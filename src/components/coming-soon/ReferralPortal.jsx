@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Copy, Share2, Trophy, Zap, Crown, Award, Medal, Users, Check, ExternalLink } from 'lucide-react';
@@ -110,20 +109,25 @@ export default function ReferralPortal({ userEmail, referralCode, currentReferra
         className="fixed inset-0 bg-black/90 backdrop-blur-md z-[60] flex items-center justify-center p-4"
         onClick={onClose}
       >
-        {/* Epic Glow */}
         <motion.div
-          animate={{
-            opacity: [0.3, 0.6, 0.3],
-            scale: [1, 1.05, 1]
-          }}
-          transition={{ duration: 3, repeat: Infinity }}
-          className="absolute inset-0 bg-gradient-to-r from-purple-600 via-pink-600 to-amber-500 rounded-3xl blur-3xl"
-        />
-
-        {/* Main Card */}
-        <div className="relative max-w-2xl w-full"
+          initial={{ scale: 0.8, opacity: 0, y: 50 }}
+          animate={{ scale: 1, opacity: 1, y: 0 }}
+          exit={{ scale: 0.8, opacity: 0, y: 50 }}
+          transition={{ type: "spring", stiffness: 300, damping: 30 }}
+          className="relative max-w-2xl w-full"
           onClick={(e) => e.stopPropagation()}
         >
+          {/* Epic Glow */}
+          <motion.div
+            animate={{
+              opacity: [0.3, 0.6, 0.3],
+              scale: [1, 1.05, 1]
+            }}
+            transition={{ duration: 3, repeat: Infinity }}
+            className="absolute inset-0 bg-gradient-to-r from-purple-600 via-pink-600 to-amber-500 rounded-3xl blur-3xl"
+          />
+
+          {/* Main Card */}
           <div className="relative bg-gradient-to-br from-[#1A0B2E] via-[#2D1B4E] to-[#0F0514] rounded-3xl p-8 md:p-10 border-2 border-white/20 overflow-hidden">
             {/* Animated Background */}
             <div className="absolute inset-0 opacity-10">

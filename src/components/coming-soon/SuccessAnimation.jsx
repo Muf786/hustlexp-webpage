@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { CheckCircle2, Sparkles, Trophy, Zap, Star, Crown, Award, Flame, Gift } from 'lucide-react';
 
-export default function SuccessAnimation({ isVisible, onClose }) {
+export default function SuccessAnimation({ isVisible, onClose, onComplete }) {
   const [xp, setXp] = useState(0);
   const [phase, setPhase] = useState(0);
   const targetXP = 100;
@@ -31,7 +31,7 @@ export default function SuccessAnimation({ isVisible, onClose }) {
         }
         
         const progress = Math.min(elapsed / duration, 1);
-        const eased = 1 - Math.pow(1 - progress, 4); // Ease out quart
+        const eased = 1 - Math.pow(1 - progress, 4);
         setXp(Math.floor(eased * targetXP));
         
         if (progress < 1) {
@@ -41,19 +41,21 @@ export default function SuccessAnimation({ isVisible, onClose }) {
       
       requestAnimationFrame(animateXP);
 
-      // Auto close after 6 seconds
-      const closeTimer = setTimeout(() => {
-        onClose();
-      }, 6000);
+      // Transition to referral portal after animation completes
+      const completeTimer = setTimeout(() => {
+        if (onComplete) {
+          onComplete();
+        }
+      }, 4000);
 
       return () => {
         phaseTimers.forEach(timer => clearTimeout(timer));
-        clearTimeout(closeTimer);
+        clearTimeout(completeTimer);
         setXp(0);
         setPhase(0);
       };
     }
-  }, [isVisible, onClose]);
+  }, [isVisible, onComplete]);
 
   return (
     <AnimatePresence>
@@ -142,7 +144,7 @@ export default function SuccessAnimation({ isVisible, onClose }) {
                 );
               })}
 
-              {/* Confetti Explosion - Multiple Waves */}
+              {/* Confetti Explosion */}
               {[...Array(60)].map((_, i) => {
                 const angle = (i / 60) * Math.PI * 2;
                 const distance = 150 + Math.random() * 400;
@@ -191,34 +193,6 @@ export default function SuccessAnimation({ isVisible, onClose }) {
                 );
               })}
 
-              {/* Sparkles Floating */}
-              {phase >= 2 && [...Array(20)].map((_, i) => (
-                <motion.div
-                  key={`sparkle-${i}`}
-                  initial={{ 
-                    x: (Math.random() - 0.5) * 400,
-                    y: (Math.random() - 0.5) * 400,
-                    scale: 0,
-                    opacity: 0
-                  }}
-                  animate={{ 
-                    y: [(Math.random() - 0.5) * 400, (Math.random() - 0.5) * 400 - 100],
-                    scale: [0, 1, 0],
-                    opacity: [0, 1, 0],
-                    rotate: [0, 180]
-                  }}
-                  transition={{ 
-                    duration: 2,
-                    delay: 1 + i * 0.1,
-                    repeat: Infinity,
-                    repeatDelay: Math.random() * 2
-                  }}
-                  className="absolute pointer-events-none"
-                >
-                  <Sparkles className="w-4 h-4 text-amber-400" />
-                </motion.div>
-              ))}
-
               {/* Main Success Card */}
               <motion.div
                 initial={{ scale: 0, rotate: -180, opacity: 0, y: 50 }}
@@ -228,7 +202,7 @@ export default function SuccessAnimation({ isVisible, onClose }) {
                   opacity: 1,
                   y: 0
                 }}
-                exit={{ scale: 0, rotate: 180, opacity: 0 }}
+                exit={{ scale: 0, opacity: 0 }}
                 transition={{ 
                   type: "spring", 
                   stiffness: 300, 
@@ -273,28 +247,8 @@ export default function SuccessAnimation({ isVisible, onClose }) {
                     />
                   </div>
 
-                  {/* Light Rays */}
-                  {phase >= 2 && [...Array(8)].map((_, i) => (
-                    <motion.div
-                      key={`ray-${i}`}
-                      initial={{ opacity: 0, scaleY: 0 }}
-                      animate={{ 
-                        opacity: [0, 0.3, 0],
-                        scaleY: [0, 1, 1],
-                        rotate: (i * 45)
-                      }}
-                      transition={{ 
-                        duration: 1,
-                        delay: 1 + i * 0.05,
-                        ease: "easeOut"
-                      }}
-                      className="absolute top-1/2 left-1/2 w-1 h-full bg-gradient-to-t from-amber-400/50 to-transparent origin-bottom"
-                      style={{ transform: 'translate(-50%, -50%)' }}
-                    />
-                  ))}
-
                   <div className="relative z-10 text-center space-y-6">
-                    {/* Trophy Icon with Epic Effects */}
+                    {/* Trophy Icon */}
                     <motion.div
                       initial={{ scale: 0, rotate: -180 }}
                       animate={{ 
@@ -394,32 +348,9 @@ export default function SuccessAnimation({ isVisible, onClose }) {
                           </motion.div>
                         );
                       })}
-
-                      {/* Floating Stars Around Trophy */}
-                      {[...Array(6)].map((_, i) => (
-                        <motion.div
-                          key={`star-float-${i}`}
-                          initial={{ scale: 0, opacity: 0 }}
-                          animate={{ 
-                            scale: [0, 1, 1, 0],
-                            opacity: [0, 1, 1, 0],
-                            x: [(i - 2.5) * 30, (i - 2.5) * 50],
-                            y: [0, -40 - i * 8, -60]
-                          }}
-                          transition={{ 
-                            duration: 2,
-                            delay: 0.8 + i * 0.1,
-                            repeat: Infinity,
-                            repeatDelay: 1
-                          }}
-                          className="absolute top-1/2 left-1/2"
-                        >
-                          <Star className="w-4 h-4 fill-amber-400 text-amber-400" />
-                        </motion.div>
-                      ))}
                     </motion.div>
 
-                    {/* Success Message with Entrance */}
+                    {/* Success Message */}
                     <motion.div
                       initial={{ opacity: 0, y: 30, scale: 0.8 }}
                       animate={{ 
@@ -451,7 +382,7 @@ export default function SuccessAnimation({ isVisible, onClose }) {
                       </p>
                     </motion.div>
 
-                    {/* XP Bar with Combo Style */}
+                    {/* XP Bar */}
                     <motion.div
                       initial={{ opacity: 0, scale: 0.8 }}
                       animate={{ 
@@ -475,7 +406,7 @@ export default function SuccessAnimation({ isVisible, onClose }) {
                         <span className="text-2xl font-bold text-white/80">XP</span>
                       </motion.div>
 
-                      {/* Progress Bar with Particles */}
+                      {/* Progress Bar */}
                       <div className="relative">
                         <div className="relative h-5 bg-black/40 rounded-full overflow-hidden backdrop-blur-xl border-2 border-white/20 shadow-inner">
                           <motion.div
@@ -485,7 +416,6 @@ export default function SuccessAnimation({ isVisible, onClose }) {
                             className="absolute inset-y-0 left-0 bg-gradient-to-r from-purple-500 via-pink-500 to-amber-500 rounded-full shadow-lg"
                           />
                           
-                          {/* Animated shimmer */}
                           <motion.div
                             animate={{ 
                               x: ['-100%', '200%'],
@@ -498,21 +428,11 @@ export default function SuccessAnimation({ isVisible, onClose }) {
                             }}
                             className="absolute inset-0 bg-gradient-to-r from-transparent via-white/50 to-transparent"
                           />
-                          
-                          {/* Particle trail */}
-                          {xp > 0 && xp < 100 && (
-                            <motion.div
-                              animate={{ scale: [1, 1.5, 1], opacity: [1, 0.5, 1] }}
-                              transition={{ duration: 0.5, repeat: Infinity }}
-                              className="absolute right-0 top-1/2 -translate-y-1/2 w-4 h-4 bg-white rounded-full blur-sm"
-                              style={{ right: `${100 - xp}%` }}
-                            />
-                          )}
                         </div>
                       </div>
                     </motion.div>
 
-                    {/* Badge Unlocked with Slide In */}
+                    {/* Badge Unlocked */}
                     <motion.div
                       initial={{ opacity: 0, x: -50, rotateY: -90 }}
                       animate={{ 
@@ -558,7 +478,7 @@ export default function SuccessAnimation({ isVisible, onClose }) {
                       </motion.div>
                     </motion.div>
 
-                    {/* Call to Actions */}
+                    {/* Call to Action */}
                     <motion.div
                       initial={{ opacity: 0 }}
                       animate={{ opacity: phase >= 4 ? 1 : 0 }}
@@ -566,10 +486,7 @@ export default function SuccessAnimation({ isVisible, onClose }) {
                       className="space-y-3 pt-4"
                     >
                       <p className="text-white/80 text-base font-medium">
-                        🎉 Check your email for exclusive updates
-                      </p>
-                      <p className="text-white/50 text-sm">
-                        Click anywhere to continue your journey
+                        🎉 Get ready for your referral portal...
                       </p>
                     </motion.div>
                   </div>

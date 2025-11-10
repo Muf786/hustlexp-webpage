@@ -4,6 +4,7 @@ import CursorGlow from '../components/coming-soon/CursorGlow';
 import Hero from '../components/coming-soon/Hero';
 import Features from '../components/coming-soon/Features';
 import SocialProof from '../components/coming-soon/SocialProof';
+import Leaderboard from '../components/coming-soon/Leaderboard';
 import HowItWorks from '../components/coming-soon/HowItWorks';
 import Footer from '../components/coming-soon/Footer';
 import FloatingCTA from '../components/coming-soon/FloatingCTA';
@@ -24,6 +25,7 @@ export default function ComingSoon() {
         </div>
         <Features />
         <SocialProof />
+        <Leaderboard />
         <HowItWorks />
         <Footer />
       </div>

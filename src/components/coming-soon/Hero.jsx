@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -6,6 +6,7 @@ import { Gamepad2, Bot, DollarSign, Sparkles, Zap, TrendingUp } from 'lucide-rea
 import { base44 } from '@/api/base44Client';
 import { toast } from 'sonner';
 import SuccessAnimation from './SuccessAnimation';
+import ReferralPortal from './ReferralPortal';
 import CountdownTimer from './CountdownTimer';
 import PhoneMockup from './PhoneMockup';
 
@@ -14,6 +15,23 @@ export default function Hero() {
   const [name, setName] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
+  const [showReferral, setShowReferral] = useState(false);
+  const [userData, setUserData] = useState(null);
+  const [referredBy, setReferredBy] = useState(null);
+
+  useEffect(() => {
+    // Check for referral code in URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const refCode = urlParams.get('ref');
+    if (refCode) {
+      setReferredBy(refCode);
+    }
+  }, []);
+
+  const generateReferralCode = (email) => {
+    return email.split('@')[0].toLowerCase().replace(/[^a-z0-9]/g, '') + 
+           Math.random().toString(36).substring(2, 6);
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -21,7 +39,30 @@ export default function Hero() {
 
     setIsSubmitting(true);
     try {
-      await base44.entities.Waitlist.create({ email, name, source: 'hero' });
+      const referralCode = generateReferralCode(email);
+      const newUser = await base44.entities.Waitlist.create({ 
+        email, 
+        name, 
+        source: referredBy ? 'referral' : 'hero',
+        referral_code: referralCode,
+        referred_by: referredBy,
+        xp: 100,
+        badges: ['founder']
+      });
+
+      // If referred by someone, update their referral count and XP
+      if (referredBy) {
+        const referrer = await base44.entities.Waitlist.filter({ referral_code: referredBy });
+        if (referrer && referrer.length > 0) {
+          const referrerData = referrer[0];
+          await base44.entities.Waitlist.update(referrerData.id, {
+            referral_count: (referrerData.referral_count || 0) + 1,
+            xp: (referrerData.xp || 100) + 25
+          });
+        }
+      }
+
+      setUserData(newUser);
       setShowSuccess(true);
       setEmail('');
       setName('');
@@ -29,6 +70,11 @@ export default function Hero() {
       toast.error('Already on the waitlist? Try another email.');
     }
     setIsSubmitting(false);
+  };
+
+  const handleSuccessComplete = () => {
+    setShowSuccess(false);
+    setShowReferral(true);
   };
 
   const badges = [
@@ -65,6 +111,19 @@ export default function Hero() {
         {/* Glow Effects */}
         <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-purple-600/20 rounded-full blur-[120px] animate-pulse" />
         <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-amber-500/20 rounded-full blur-[120px] animate-pulse" style={{ animationDelay: '1s' }} />
+
+        {referredBy && (
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="absolute top-4 left-1/2 -translate-x-1/2 z-20 px-6 py-3 bg-gradient-to-r from-purple-600/30 to-amber-600/30 backdrop-blur-xl border border-white/20 rounded-full"
+          >
+            <p className="text-white text-sm font-semibold flex items-center gap-2">
+              <Sparkles className="w-4 h-4 text-amber-400" />
+              You've been invited! Both you and your friend earn +25 XP
+            </p>
+          </motion.div>
+        )}
 
         <div className="relative z-10 max-w-7xl mx-auto">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
@@ -242,7 +301,24 @@ export default function Hero() {
       </section>
 
       {/* Success Animation */}
-      <SuccessAnimation isVisible={showSuccess} onClose={() => setShowSuccess(false)} />
+      <SuccessAnimation 
+        isVisible={showSuccess} 
+        onClose={() => {
+          setShowSuccess(false);
+          setShowReferral(true);
+        }}
+        onComplete={handleSuccessComplete}
+      />
+
+      {/* Referral Portal */}
+      {showReferral && userData && (
+        <ReferralPortal
+          userEmail={userData.email}
+          referralCode={userData.referral_code}
+          currentReferrals={userData.referral_count || 0}
+          onClose={() => setShowReferral(false)}
+        />
+      )}
     </>
   );
 }

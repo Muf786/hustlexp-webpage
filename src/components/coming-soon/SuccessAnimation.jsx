@@ -1,6 +1,8 @@
+
 import React, { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { CheckCircle2, Sparkles, Trophy, Zap, Star, Crown, Award, Flame, Gift } from 'lucide-react';
+import { playXPSound, playBadgeUnlockSound } from './AudioSystem';
 
 export default function SuccessAnimation({ isVisible, onClose, onComplete }) {
   const [xp, setXp] = useState(0);
@@ -9,37 +11,47 @@ export default function SuccessAnimation({ isVisible, onClose, onComplete }) {
 
   useEffect(() => {
     if (isVisible) {
+      // Play initial success sound
+      playXPSound();
+      
       // Phase progression
       const phaseTimers = [
         setTimeout(() => setPhase(1), 300),
         setTimeout(() => setPhase(2), 800),
-        setTimeout(() => setPhase(3), 1500),
-        setTimeout(() => setPhase(4), 2200),
+        setTimeout(() => {
+          setPhase(3);
+          playXPSound(); // Play XP sound when phase 3 (XP counter start)
+        }, 1500),
+        setTimeout(() => {
+          setPhase(4);
+          playBadgeUnlockSound(); // Play badge unlock sound when phase 4 (badge appears)
+        }, 2200),
       ];
 
       // Animate XP counter with easing
       const duration = 1500;
-      const startTime = Date.now() + 800;
-      
+      const startTime = Date.now() + 800; // Delay XP animation start slightly
+
+      let animationFrameId;
       const animateXP = () => {
         const now = Date.now();
         const elapsed = now - startTime;
         
         if (elapsed < 0) {
-          requestAnimationFrame(animateXP);
+          animationFrameId = requestAnimationFrame(animateXP);
           return;
         }
         
         const progress = Math.min(elapsed / duration, 1);
-        const eased = 1 - Math.pow(1 - progress, 4);
+        const eased = 1 - Math.pow(1 - progress, 4); // Easing function
         setXp(Math.floor(eased * targetXP));
         
         if (progress < 1) {
-          requestAnimationFrame(animateXP);
+          animationFrameId = requestAnimationFrame(animateXP);
         }
       };
       
-      requestAnimationFrame(animateXP);
+      animationFrameId = requestAnimationFrame(animateXP);
 
       // Transition to referral portal after animation completes
       const completeTimer = setTimeout(() => {
@@ -51,6 +63,7 @@ export default function SuccessAnimation({ isVisible, onClose, onComplete }) {
       return () => {
         phaseTimers.forEach(timer => clearTimeout(timer));
         clearTimeout(completeTimer);
+        cancelAnimationFrame(animationFrameId); // Clean up requestAnimationFrame
         setXp(0);
         setPhase(0);
       };

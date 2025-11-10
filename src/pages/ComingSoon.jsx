@@ -8,10 +8,18 @@ import Leaderboard from '../components/coming-soon/Leaderboard';
 import HowItWorks from '../components/coming-soon/HowItWorks';
 import Footer from '../components/coming-soon/Footer';
 import FloatingCTA from '../components/coming-soon/FloatingCTA';
+import AudioSystem from '../components/coming-soon/AudioSystem';
+import LiveNotifications from '../components/coming-soon/LiveNotifications';
 
 export default function ComingSoon() {
   return (
     <div className="relative min-h-screen bg-[#0F0514] overflow-hidden">
+      {/* Audio System */}
+      <AudioSystem />
+      
+      {/* Live Notifications */}
+      <LiveNotifications />
+      
       {/* Animated Particle Background */}
       <ParticleField />
       

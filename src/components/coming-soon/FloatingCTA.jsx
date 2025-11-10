@@ -1,7 +1,9 @@
+
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Zap } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { playClickSound } from './AudioSystem';
 
 export default function FloatingCTA() {
   const [isVisible, setIsVisible] = useState(false);
@@ -17,6 +19,7 @@ export default function FloatingCTA() {
   }, []);
 
   const scrollToHero = () => {
+    playClickSound();
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
@@ -30,7 +33,11 @@ export default function FloatingCTA() {
           transition={{ duration: 0.3 }}
           className="fixed bottom-6 right-6 z-50"
         >
-          <div className="relative group">
+          <motion.div
+            className="relative group"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+          >
             {/* Glow */}
             <div className="absolute inset-0 bg-gradient-to-r from-purple-600 to-amber-500 rounded-full blur-xl opacity-75 group-hover:opacity-100 transition-opacity animate-pulse" />
             
@@ -42,7 +49,7 @@ export default function FloatingCTA() {
               <Zap className="w-5 h-5" />
               <span>Join Waitlist</span>
             </Button>
-          </div>
+          </motion.div>
         </motion.div>
       )}
     </AnimatePresence>

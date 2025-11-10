@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
@@ -9,6 +10,8 @@ import SuccessAnimation from './SuccessAnimation';
 import ReferralPortal from './ReferralPortal';
 import CountdownTimer from './CountdownTimer';
 import PhoneMockup from './PhoneMockup';
+import { playClickSound, playSuccessSound } from './AudioSystem';
+import DynamicGrid from './DynamicGrid';
 
 export default function Hero() {
   const [email, setEmail] = useState('');
@@ -18,6 +21,7 @@ export default function Hero() {
   const [showReferral, setShowReferral] = useState(false);
   const [userData, setUserData] = useState(null);
   const [referredBy, setReferredBy] = useState(null);
+  const [gridTrigger, setGridTrigger] = useState(0);
 
   useEffect(() => {
     // Check for referral code in URL
@@ -59,11 +63,13 @@ export default function Hero() {
             referral_count: (referrerData.referral_count || 0) + 1,
             xp: (referrerData.xp || 100) + 25
           });
+          setGridTrigger(prev => prev + 1); // Trigger grid animation on referrer update
         }
       }
 
       setUserData(newUser);
       setShowSuccess(true);
+      playSuccessSound();
       setEmail('');
       setName('');
     } catch (error) {
@@ -89,24 +95,8 @@ export default function Hero() {
         {/* Gradient Background */}
         <div className="absolute inset-0 bg-gradient-to-b from-[#0F0514] via-[#1A0B2E] to-[#0F0514]" />
         
-        {/* Animated Grid */}
-        <div className="absolute inset-0 opacity-20">
-          <motion.div
-            animate={{
-              backgroundPosition: ['0% 0%', '100% 100%'],
-            }}
-            transition={{
-              duration: 20,
-              repeat: Infinity,
-              ease: "linear"
-            }}
-            className="absolute inset-0"
-            style={{
-              backgroundImage: 'linear-gradient(rgba(168, 85, 247, 0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(168, 85, 247, 0.1) 1px, transparent 1px)',
-              backgroundSize: '50px 50px'
-            }}
-          />
-        </div>
+        {/* Dynamic Grid */}
+        <DynamicGrid trigger={gridTrigger} />
         
         {/* Glow Effects */}
         <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-purple-600/20 rounded-full blur-[120px] animate-pulse" />
@@ -187,7 +177,9 @@ export default function Hero() {
                     animate={{ opacity: 1, scale: 1 }}
                     transition={{ duration: 0.5, delay: 0.8 + index * 0.1 }}
                     whileHover={{ scale: 1.05, y: -5 }}
-                    className="group relative"
+                    whileTap={{ scale: 0.95 }}
+                    onTap={playClickSound}
+                    className="group relative cursor-pointer"
                   >
                     <div className={`absolute inset-0 bg-gradient-to-r ${badge.color} rounded-xl blur-xl opacity-50 group-hover:opacity-75 transition-opacity`} />
                     <div className="relative px-5 py-2.5 rounded-xl bg-white/5 backdrop-blur-xl border border-white/10 flex items-center gap-2">
@@ -230,28 +222,31 @@ export default function Hero() {
                     </div>
                   </div>
                   
-                  <Button
-                    type="submit"
-                    disabled={isSubmitting}
-                    className="relative w-full h-14 px-8 bg-gradient-to-r from-purple-600 to-amber-500 hover:from-purple-500 hover:to-amber-400 text-white font-bold text-lg rounded-lg overflow-hidden group"
-                  >
-                    <motion.div
-                      animate={{
-                        boxShadow: [
-                          '0 0 20px rgba(168, 85, 247, 0.5)',
-                          '0 0 40px rgba(251, 191, 36, 0.8)',
-                          '0 0 20px rgba(168, 85, 247, 0.5)'
-                        ]
-                      }}
-                      transition={{ duration: 2, repeat: Infinity }}
-                      className="absolute inset-0"
-                    />
-                    <span className="relative z-10 flex items-center justify-center gap-2">
-                      {isSubmitting ? 'Joining...' : 'Join Waitlist'}
-                      <Zap className="w-5 h-5" />
-                    </span>
-                    <div className="absolute inset-0 bg-gradient-to-r from-amber-400 to-pink-500 opacity-0 group-hover:opacity-100 transition-opacity" />
-                  </Button>
+                  <motion.div whileTap={{ scale: 0.98 }}>
+                    <Button
+                      type="submit"
+                      disabled={isSubmitting}
+                      onClick={playClickSound}
+                      className="relative w-full h-14 px-8 bg-gradient-to-r from-purple-600 to-amber-500 hover:from-purple-500 hover:to-amber-400 text-white font-bold text-lg rounded-lg overflow-hidden group"
+                    >
+                      <motion.div
+                        animate={{
+                          boxShadow: [
+                            '0 0 20px rgba(168, 85, 247, 0.5)',
+                            '0 0 40px rgba(251, 191, 36, 0.8)',
+                            '0 0 20px rgba(168, 85, 247, 0.5)'
+                          ]
+                        }}
+                        transition={{ duration: 2, repeat: Infinity }}
+                        className="absolute inset-0"
+                      />
+                      <span className="relative z-10 flex items-center justify-center gap-2">
+                        {isSubmitting ? 'Joining...' : 'Join Waitlist'}
+                        <Zap className="w-5 h-5" />
+                      </span>
+                      <div className="absolute inset-0 bg-gradient-to-r from-amber-400 to-pink-500 opacity-0 group-hover:opacity-100 transition-opacity" />
+                    </Button>
+                  </motion.div>
                 </form>
                 
                 <p className="mt-4 text-sm text-white/50 text-center lg:text-left">

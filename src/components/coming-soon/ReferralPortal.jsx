@@ -1,9 +1,11 @@
+
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Copy, Share2, Trophy, Zap, Crown, Award, Medal, Users, Check, ExternalLink } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { toast } from 'sonner';
+import { playClickSound } from './AudioSystem';
 
 const BADGE_TIERS = [
   { name: 'Bronze', referrals: 3, icon: Medal, color: 'from-orange-600 to-orange-800', xp: 50 },
@@ -30,6 +32,7 @@ export default function ReferralPortal({ userEmail, referralCode, currentReferra
   const handleCopy = async () => {
     await navigator.clipboard.writeText(referralUrl);
     setCopied(true);
+    playClickSound();
     toast.success('🎮 Referral link copied!');
     setTimeout(() => setCopied(false), 2000);
   };
@@ -42,6 +45,7 @@ export default function ReferralPortal({ userEmail, referralCode, currentReferra
           text: 'Join me on the HustleXP waitlist! AI-powered gig marketplace meets RPG. Seattle 2026.',
           url: referralUrl
         });
+        playClickSound();
         toast.success('🚀 Thanks for sharing!');
       } catch (err) {
         if (err.name !== 'AbortError') {
@@ -106,25 +110,20 @@ export default function ReferralPortal({ userEmail, referralCode, currentReferra
         className="fixed inset-0 bg-black/90 backdrop-blur-md z-[60] flex items-center justify-center p-4"
         onClick={onClose}
       >
+        {/* Epic Glow */}
         <motion.div
-          initial={{ scale: 0.8, opacity: 0, y: 50 }}
-          animate={{ scale: 1, opacity: 1, y: 0 }}
-          exit={{ scale: 0.8, opacity: 0, y: 50 }}
-          transition={{ type: "spring", stiffness: 300, damping: 30 }}
-          className="relative max-w-2xl w-full"
+          animate={{
+            opacity: [0.3, 0.6, 0.3],
+            scale: [1, 1.05, 1]
+          }}
+          transition={{ duration: 3, repeat: Infinity }}
+          className="absolute inset-0 bg-gradient-to-r from-purple-600 via-pink-600 to-amber-500 rounded-3xl blur-3xl"
+        />
+
+        {/* Main Card */}
+        <div className="relative max-w-2xl w-full"
           onClick={(e) => e.stopPropagation()}
         >
-          {/* Epic Glow */}
-          <motion.div
-            animate={{
-              opacity: [0.3, 0.6, 0.3],
-              scale: [1, 1.05, 1]
-            }}
-            transition={{ duration: 3, repeat: Infinity }}
-            className="absolute inset-0 bg-gradient-to-r from-purple-600 via-pink-600 to-amber-500 rounded-3xl blur-3xl"
-          />
-
-          {/* Main Card */}
           <div className="relative bg-gradient-to-br from-[#1A0B2E] via-[#2D1B4E] to-[#0F0514] rounded-3xl p-8 md:p-10 border-2 border-white/20 overflow-hidden">
             {/* Animated Background */}
             <div className="absolute inset-0 opacity-10">
@@ -267,20 +266,27 @@ export default function ReferralPortal({ userEmail, referralCode, currentReferra
                 transition={{ delay: 0.4 }}
                 className="grid grid-cols-2 gap-3"
               >
-                <Button
-                  onClick={handleShare}
-                  className="h-12 bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-500 hover:to-cyan-500 text-white font-semibold"
-                >
-                  <Share2 className="w-4 h-4 mr-2" />
-                  Share Link
-                </Button>
-                <Button
-                  onClick={onClose}
-                  variant="outline"
-                  className="h-12 border-white/20 bg-white/5 hover:bg-white/10 text-white font-semibold"
-                >
-                  Continue
-                </Button>
+                <motion.div whileTap={{ scale: 0.95 }}>
+                  <Button
+                    onClick={handleShare}
+                    className="w-full h-12 bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-500 hover:to-cyan-500 text-white font-semibold"
+                  >
+                    <Share2 className="w-4 h-4 mr-2" />
+                    Share Link
+                  </Button>
+                </motion.div>
+                <motion.div whileTap={{ scale: 0.95 }}>
+                  <Button
+                    onClick={() => {
+                      playClickSound();
+                      onClose();
+                    }}
+                    variant="outline"
+                    className="w-full h-12 border-white/20 bg-white/5 hover:bg-white/10 text-white font-semibold"
+                  >
+                    Continue
+                  </Button>
+                </motion.div>
               </motion.div>
 
               {/* Footer Info */}

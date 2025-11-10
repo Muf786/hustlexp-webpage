@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Trophy, Medal, Award, Crown, TrendingUp, Zap } from 'lucide-react';
@@ -46,6 +47,41 @@ export default function Leaderboard() {
     <section className="relative py-24 px-4 overflow-hidden">
       {/* Background */}
       <div className="absolute inset-0 bg-gradient-to-b from-[#0F0514] via-[#1A0B2E] to-[#0F0514]" />
+      
+      {/* XP Heatmap Waves */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        {[...Array(5)].map((_, i) => (
+          <motion.div
+            key={`wave-${i}`}
+            initial={{ opacity: 0, y: 100 }}
+            animate={{ 
+              opacity: [0, 0.15, 0],
+              y: [100, -100],
+            }}
+            transition={{
+              duration: 8,
+              delay: i * 1.5,
+              repeat: Infinity,
+              ease: "easeInOut"
+            }}
+            className="absolute inset-0"
+            style={{
+              background: `radial-gradient(ellipse at ${50 + i * 10}% ${50 + i * 5}%, rgba(251, 191, 36, 0.4) 0%, transparent 50%)`
+            }}
+          />
+        ))}
+        <motion.div
+          animate={{
+            background: [
+              'radial-gradient(circle at 20% 30%, rgba(168, 85, 247, 0.1) 0%, transparent 50%)',
+              'radial-gradient(circle at 80% 70%, rgba(168, 85, 247, 0.1) 0%, transparent 50%)',
+              'radial-gradient(circle at 20% 30%, rgba(168, 85, 247, 0.1) 0%, transparent 50%)'
+            ]
+          }}
+          transition={{ duration: 10, repeat: Infinity }}
+          className="absolute inset-0"
+        />
+      </div>
       
       {/* Glow */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-amber-600/20 rounded-full blur-[150px]" />

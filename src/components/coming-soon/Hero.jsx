@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
@@ -115,10 +114,10 @@ export default function Hero() {
           </motion.div>
         )}
 
-        <div className="relative z-10 max-w-7xl mx-auto">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
-            {/* Left Side - Content */}
-            <div className="text-center lg:text-left">
+        <div className="relative z-10 max-w-4xl mx-auto">
+          <div className="flex flex-col items-center">
+            {/* Main Content */}
+            <div className="text-center w-full">
               {/* Badge */}
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
@@ -168,7 +167,7 @@ export default function Hero() {
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, delay: 0.6 }}
-                className="flex flex-wrap justify-center lg:justify-start gap-3 mb-8"
+                className="flex flex-wrap justify-center gap-3 mb-8"
               >
                 {badges.map((badge, index) => (
                   <motion.div
@@ -195,7 +194,7 @@ export default function Hero() {
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, delay: 1 }}
-                className="max-w-xl"
+                className="max-w-xl mx-auto"
               >
                 <form onSubmit={handleSubmit} className="space-y-3">
                   <div className="flex flex-col sm:flex-row gap-3">
@@ -249,7 +248,7 @@ export default function Hero() {
                   </motion.div>
                 </form>
                 
-                <p className="mt-4 text-sm text-white/50 text-center lg:text-left">
+                <p className="mt-4 text-sm text-white/50 text-center">
                   Be among the first 1,000 to earn <span className="text-amber-400 font-semibold">Founder Badges</span> ✨
                 </p>
               </motion.div>
@@ -259,7 +258,7 @@ export default function Hero() {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ duration: 1, delay: 1.2 }}
-                className="mt-8 flex flex-wrap justify-center lg:justify-start gap-6 text-white/60"
+                className="mt-8 flex flex-wrap justify-center gap-6 text-white/60"
               >
                 <div className="flex items-center gap-2">
                   <TrendingUp className="w-5 h-5 text-green-400" />
@@ -274,11 +273,6 @@ export default function Hero() {
                   <span className="text-sm">Built Different</span>
                 </div>
               </motion.div>
-            </div>
-
-            {/* Right Side - Phone Mockup */}
-            <div className="hidden lg:block">
-              <PhoneMockup />
             </div>
           </div>
         </div>

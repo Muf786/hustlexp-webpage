@@ -18,20 +18,45 @@ const locations = [
   'Portland, OR', 'Vancouver, BC', 'San Francisco, CA', 'Los Angeles, CA', 'New York, NY'
 ];
 
-const getRandomActivity = () => ({
-  name: names[Math.floor(Math.random() * names.length)],
-  action: actions[Math.floor(Math.random() * actions.length)],
-  location: locations[Math.floor(Math.random() * locations.length)],
-  xp: [25, 50, 75, 100, 150][Math.floor(Math.random() * 5)]
-});
+// Shuffle array using Fisher-Yates algorithm
+const shuffleArray = (array) => {
+  const shuffled = [...array];
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+  }
+  return shuffled;
+};
+
+let namePool = shuffleArray(names);
+let nameIndex = 0;
+
+const getNextActivity = () => {
+  // Get next name from the pool
+  const name = namePool[nameIndex];
+  nameIndex++;
+  
+  // Reshuffle and reset when we've used all names
+  if (nameIndex >= namePool.length) {
+    namePool = shuffleArray(names);
+    nameIndex = 0;
+  }
+  
+  return {
+    name,
+    action: actions[Math.floor(Math.random() * actions.length)],
+    location: locations[Math.floor(Math.random() * locations.length)],
+    xp: [25, 50, 75, 100, 150][Math.floor(Math.random() * 5)]
+  };
+};
 
 export default function LiveActivity() {
-  const [currentActivity, setCurrentActivity] = useState(getRandomActivity());
+  const [currentActivity, setCurrentActivity] = useState(getNextActivity());
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setCurrentActivity(getRandomActivity());
-    }, 1000);
+      setCurrentActivity(getNextActivity());
+    }, 30000); // 30 seconds
     return () => clearInterval(interval);
   }, []);
 

@@ -15,6 +15,7 @@ import DynamicGrid from './DynamicGrid';
 export default function Hero() {
   const [email, setEmail] = useState('');
   const [name, setName] = useState('');
+  const [phone, setPhone] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
   const [showReferral, setShowReferral] = useState(false);
@@ -38,13 +39,14 @@ export default function Hero() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!email) return;
+    if (!email || !phone) return;
 
     setIsSubmitting(true);
     try {
       const referralCode = generateReferralCode(email);
       const newUser = await base44.entities.Waitlist.create({ 
-        email, 
+        email,
+        phone,
         name, 
         source: referredBy ? 'referral' : 'hero',
         referral_code: referralCode,
@@ -71,6 +73,7 @@ export default function Hero() {
       playSuccessSound();
       setEmail('');
       setName('');
+      setPhone('');
     } catch (error) {
       toast.error('Already on the waitlist? Try another email.');
     }
@@ -197,8 +200,8 @@ export default function Hero() {
                 className="max-w-xl mx-auto"
               >
                 <form onSubmit={handleSubmit} className="space-y-3">
-                  <div className="flex flex-col sm:flex-row gap-3">
-                    <div className="relative flex-1 group">
+                  <div className="flex flex-col gap-3">
+                    <div className="relative group">
                       <div className="absolute inset-0 bg-gradient-to-r from-purple-600 to-pink-600 rounded-lg blur-xl opacity-0 group-hover:opacity-30 group-focus-within:opacity-30 transition-opacity" />
                       <Input
                         type="text"
@@ -208,16 +211,29 @@ export default function Hero() {
                         className="relative h-14 bg-white/5 backdrop-blur-xl border-white/10 text-white placeholder:text-white/40 focus:border-purple-500 transition-colors"
                       />
                     </div>
-                    <div className="relative flex-1 group">
-                      <div className="absolute inset-0 bg-gradient-to-r from-purple-600 to-pink-600 rounded-lg blur-xl opacity-0 group-hover:opacity-30 group-focus-within:opacity-30 transition-opacity" />
-                      <Input
-                        type="email"
-                        placeholder="Your email address"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        required
-                        className="relative h-14 bg-white/5 backdrop-blur-xl border-white/10 text-white placeholder:text-white/40 focus:border-purple-500 transition-colors"
-                      />
+                    <div className="flex flex-col sm:flex-row gap-3">
+                      <div className="relative flex-1 group">
+                        <div className="absolute inset-0 bg-gradient-to-r from-purple-600 to-pink-600 rounded-lg blur-xl opacity-0 group-hover:opacity-30 group-focus-within:opacity-30 transition-opacity" />
+                        <Input
+                          type="email"
+                          placeholder="Your email address"
+                          value={email}
+                          onChange={(e) => setEmail(e.target.value)}
+                          required
+                          className="relative h-14 bg-white/5 backdrop-blur-xl border-white/10 text-white placeholder:text-white/40 focus:border-purple-500 transition-colors"
+                        />
+                      </div>
+                      <div className="relative flex-1 group">
+                        <div className="absolute inset-0 bg-gradient-to-r from-purple-600 to-pink-600 rounded-lg blur-xl opacity-0 group-hover:opacity-30 group-focus-within:opacity-30 transition-opacity" />
+                        <Input
+                          type="tel"
+                          placeholder="Your phone number"
+                          value={phone}
+                          onChange={(e) => setPhone(e.target.value)}
+                          required
+                          className="relative h-14 bg-white/5 backdrop-blur-xl border-white/10 text-white placeholder:text-white/40 focus:border-purple-500 transition-colors"
+                        />
+                      </div>
                     </div>
                   </div>
                   

@@ -9,18 +9,20 @@ import SuccessAnimation from './SuccessAnimation';
 
 export default function Footer() {
   const [email, setEmail] = useState('');
+  const [phone, setPhone] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!email) return;
+    if (!email || !phone) return;
 
     setIsSubmitting(true);
     try {
-      await base44.entities.Waitlist.create({ email, source: 'footer' });
+      await base44.entities.Waitlist.create({ email, phone, source: 'footer' });
       setShowSuccess(true);
       setEmail('');
+      setPhone('');
     } catch (error) {
       toast.error('Already on the waitlist? Try another email.');
     }
@@ -57,24 +59,37 @@ export default function Footer() {
               Join the waitlist and be among the first to experience the future of gig work
             </p>
 
-            <form onSubmit={handleSubmit} className="max-w-md mx-auto flex gap-3">
-              <div className="relative flex-1 group">
-                <div className="absolute inset-0 bg-gradient-to-r from-purple-600 to-pink-600 rounded-lg blur-xl opacity-0 group-hover:opacity-30 transition-opacity" />
-                <Input
-                  type="email"
-                  placeholder="Enter your email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  required
-                  className="relative h-12 bg-white/5 backdrop-blur-xl border-white/10 text-white placeholder:text-white/40"
-                />
+            <form onSubmit={handleSubmit} className="max-w-md mx-auto space-y-3">
+              <div className="flex gap-3">
+                <div className="relative flex-1 group">
+                  <div className="absolute inset-0 bg-gradient-to-r from-purple-600 to-pink-600 rounded-lg blur-xl opacity-0 group-hover:opacity-30 transition-opacity" />
+                  <Input
+                    type="email"
+                    placeholder="Enter your email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    required
+                    className="relative h-12 bg-white/5 backdrop-blur-xl border-white/10 text-white placeholder:text-white/40"
+                  />
+                </div>
+                <div className="relative flex-1 group">
+                  <div className="absolute inset-0 bg-gradient-to-r from-purple-600 to-pink-600 rounded-lg blur-xl opacity-0 group-hover:opacity-30 transition-opacity" />
+                  <Input
+                    type="tel"
+                    placeholder="Phone number"
+                    value={phone}
+                    onChange={(e) => setPhone(e.target.value)}
+                    required
+                    className="relative h-12 bg-white/5 backdrop-blur-xl border-white/10 text-white placeholder:text-white/40"
+                  />
+                </div>
               </div>
               <Button
                 type="submit"
                 disabled={isSubmitting}
-                className="h-12 px-6 bg-gradient-to-r from-purple-600 to-amber-500 hover:from-purple-500 hover:to-amber-400 text-white font-bold"
+                className="w-full h-12 px-6 bg-gradient-to-r from-purple-600 to-amber-500 hover:from-purple-500 hover:to-amber-400 text-white font-bold"
               >
-                {isSubmitting ? 'Joining...' : 'Join'}
+                {isSubmitting ? 'Joining...' : 'Join Waitlist'}
               </Button>
             </form>
           </motion.div>

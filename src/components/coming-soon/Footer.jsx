@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Instagram, Twitter, Zap } from 'lucide-react';
+import { Instagram, Zap } from 'lucide-react';
 import { base44 } from '@/api/base44Client';
 import { toast } from 'sonner';
 import SuccessAnimation from './SuccessAnimation';
@@ -29,7 +29,7 @@ export default function Footer() {
 
   const socialLinks = [
     { icon: Instagram, label: 'Instagram', href: 'https://instagram.com/officialhustlexp' },
-    { icon: Twitter, label: 'X', href: 'https://x.com/HustleXpApp' }
+    { icon: null, label: 'X', href: 'https://x.com/HustleXpApp' }
   ];
 
   return (
@@ -98,7 +98,11 @@ export default function Footer() {
               >
                 <div className="absolute inset-0 bg-gradient-to-r from-purple-600 to-pink-600 rounded-full blur-lg opacity-0 group-hover:opacity-50 transition-opacity" />
                 <div className="relative w-12 h-12 rounded-full bg-white/5 backdrop-blur-xl border border-white/10 hover:border-white/30 flex items-center justify-center transition-all">
-                  <social.icon className="w-5 h-5 text-white/70 group-hover:text-white transition-colors" />
+                  {social.icon ? (
+                    <social.icon className="w-5 h-5 text-white/70 group-hover:text-white transition-colors" />
+                  ) : (
+                    <span className="text-xl font-bold text-white/70 group-hover:text-white transition-colors">𝕏</span>
+                  )}
                 </div>
               </a>
             ))}

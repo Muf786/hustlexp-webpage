@@ -28,9 +28,8 @@ export default function Footer() {
   };
 
   const socialLinks = [
-    { icon: Instagram, label: 'Instagram', href: '#' },
-    { icon: Twitter, label: 'X', href: '#' },
-    { icon: Zap, label: 'TikTok', href: '#' }
+    { icon: Instagram, label: 'Instagram', href: 'https://instagram.com/officialhustlexp' },
+    { icon: Twitter, label: 'X', href: 'https://x.com/HustleXpApp' }
   ];
 
   return (
@@ -92,6 +91,8 @@ export default function Footer() {
               <a
                 key={social.label}
                 href={social.href}
+                target="_blank"
+                rel="noopener noreferrer"
                 aria-label={social.label}
                 className="group relative"
               >

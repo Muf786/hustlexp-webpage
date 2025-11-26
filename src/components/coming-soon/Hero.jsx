@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Gamepad2, Bot, DollarSign, Sparkles, Zap, TrendingUp } from 'lucide-react';
-import { base44 } from '@/api/base44Client';
+import { addToWaitlist } from '@/firebase/waitlist';
 import { toast } from 'sonner';
 import SuccessAnimation from './SuccessAnimation';
 import ReferralPortal from './ReferralPortal';
@@ -39,43 +39,26 @@ export default function Hero() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!email || !phone) return;
-
+    if (!email) return;
+  
     setIsSubmitting(true);
     try {
       const referralCode = generateReferralCode(email);
-      const newUser = await base44.entities.Waitlist.create({ 
+  
+      await addToWaitlist({
         email,
-        phone,
-        name, 
-        source: referredBy ? 'referral' : 'hero',
+        name,
+        source: referredBy ? "referral" : "hero",
         referral_code: referralCode,
-        referred_by: referredBy,
-        xp: 100,
-        badges: ['founder']
+        referred_by: referredBy
       });
-
-      // If referred by someone, update their referral count and XP
-      if (referredBy) {
-        const referrer = await base44.entities.Waitlist.filter({ referral_code: referredBy });
-        if (referrer && referrer.length > 0) {
-          const referrerData = referrer[0];
-          await base44.entities.Waitlist.update(referrerData.id, {
-            referral_count: (referrerData.referral_count || 0) + 1,
-            xp: (referrerData.xp || 100) + 25
-          });
-          setGridTrigger(prev => prev + 1); // Trigger grid animation on referrer update
-        }
-      }
-
-      setUserData(newUser);
+  
       setShowSuccess(true);
       playSuccessSound();
-      setEmail('');
-      setName('');
-      setPhone('');
+      setEmail("");
+      setName("");
     } catch (error) {
-      toast.error('Already on the waitlist? Try another email.');
+      toast.error("Error joining waitlist. Try again.");
     }
     setIsSubmitting(false);
   };

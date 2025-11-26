@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Instagram, Zap } from 'lucide-react';
-import { base44 } from '@/api/base44Client';
+import { addToWaitlist } from '@/firebase/waitlist';
 import { toast } from 'sonner';
 import SuccessAnimation from './SuccessAnimation';
 
@@ -15,16 +15,22 @@ export default function Footer() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!email || !phone) return;
-
+    if (!email) return;
+  
     setIsSubmitting(true);
     try {
-      await base44.entities.Waitlist.create({ email, phone, source: 'footer' });
+      await addToWaitlist({
+        email,
+        name: "",
+        source: "footer",
+        referral_code: "",
+        referred_by: ""
+      });
+  
       setShowSuccess(true);
-      setEmail('');
-      setPhone('');
+      setEmail("");
     } catch (error) {
-      toast.error('Already on the waitlist? Try another email.');
+      toast.error("Error joining waitlist.");
     }
     setIsSubmitting(false);
   };

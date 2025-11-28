@@ -33,26 +33,27 @@ export default function Hero() {
   }, []);
 
   const generateReferralCode = (email) => {
-    return email.split('@')[0].toLowerCase().replace(/[^a-z0-9]/g, '') + 
+    return email.split('@')[0].toLowerCase().replace(/[^a-z0-9]/g, '') +
            Math.random().toString(36).substring(2, 6);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!email) return;
-  
+
     setIsSubmitting(true);
     try {
       const referralCode = generateReferralCode(email);
-  
+
       await addToWaitlist({
         email,
         name,
+        phone,
         source: referredBy ? "referral" : "hero",
         referral_code: referralCode,
         referred_by: referredBy
       });
-  
+
       setShowSuccess(true);
       playSuccessSound();
       setEmail("");
@@ -79,10 +80,10 @@ export default function Hero() {
       <section className="relative min-h-screen flex items-center justify-center px-4 py-20 overflow-hidden">
         {/* Gradient Background */}
         <div className="absolute inset-0 bg-gradient-to-b from-[#0F0514] via-[#1A0B2E] to-[#0F0514]" />
-        
+
         {/* Dynamic Grid */}
         <DynamicGrid trigger={gridTrigger} />
-        
+
         {/* Glow Effects */}
         <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-purple-600/20 rounded-full blur-[120px] animate-pulse" />
         <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-amber-500/20 rounded-full blur-[120px] animate-pulse" style={{ animationDelay: '1s' }} />
@@ -219,7 +220,7 @@ export default function Hero() {
                       </div>
                     </div>
                   </div>
-                  
+
                   <motion.div whileTap={{ scale: 0.98 }}>
                     <Button
                       type="submit"
@@ -246,7 +247,7 @@ export default function Hero() {
                     </Button>
                   </motion.div>
                 </form>
-                
+
                 <p className="mt-4 text-sm text-white/50 text-center">
                   Be among the first 1,000 to earn <span className="text-amber-400 font-semibold">Founder Badges</span> ✨
                 </p>
@@ -289,8 +290,8 @@ export default function Hero() {
       </section>
 
       {/* Success Animation */}
-      <SuccessAnimation 
-        isVisible={showSuccess} 
+      <SuccessAnimation
+        isVisible={showSuccess}
         onClose={() => {
           setShowSuccess(false);
           setShowReferral(true);

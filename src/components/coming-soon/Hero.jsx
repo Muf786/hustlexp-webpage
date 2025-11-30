@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Gamepad2, Bot, DollarSign, Sparkles, Zap, TrendingUp } from 'lucide-react';
-import { addToWaitlist } from '@/firebase/waitlist';
+import { addToWaitlist } from '@/components/firebase/waitlist';
 import { toast } from 'sonner';
 import SuccessAnimation from './SuccessAnimation';
 import ReferralPortal from './ReferralPortal';

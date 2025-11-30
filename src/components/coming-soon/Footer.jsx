@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Instagram, Zap } from 'lucide-react';
-import { addToWaitlist } from '@/firebase/waitlist';
+import { addToWaitlist } from '@/components/firebase/waitlist';
 import { toast } from 'sonner';
 import SuccessAnimation from './SuccessAnimation';
 
@@ -16,7 +16,7 @@ export default function Footer() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!email) return;
-  
+
     setIsSubmitting(true);
     try {
       await addToWaitlist({
@@ -26,7 +26,7 @@ export default function Footer() {
         referral_code: "",
         referred_by: ""
       });
-  
+
       setShowSuccess(true);
       setEmail("");
     } catch (error) {
@@ -45,7 +45,7 @@ export default function Footer() {
       <footer className="relative py-20 px-4 overflow-hidden">
         {/* Background */}
         <div className="absolute inset-0 bg-gradient-to-b from-[#1A0B2E] to-[#0F0514]" />
-        
+
         {/* Glow */}
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-96 bg-gradient-to-b from-purple-600/20 to-transparent" />
 

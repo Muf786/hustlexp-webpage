@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Instagram, Zap } from 'lucide-react';
-import { addToWaitlist } from '@/components/firebase/waitlist';
+import { addToWaitlist } from '@/firebase/waitlist';
 import { toast } from 'sonner';
 import SuccessAnimation from './SuccessAnimation';
 

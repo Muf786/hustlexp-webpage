@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Users, Star, Flame } from 'lucide-react';
-import { base44 } from '@/api/base44Client';
+import { db } from '@/firebase/config';
+import { collection, getDocs } from 'firebase/firestore';
 import LiveActivity from './LiveActivity';
 
 export default function SocialProof() {
@@ -11,10 +12,11 @@ export default function SocialProof() {
   useEffect(() => {
     const fetchCount = async () => {
       try {
-        const waitlist = await base44.entities.Waitlist.list();
-        setWaitlistCount(waitlist.length);
+        const waitlistRef = collection(db, 'waitlist');
+        const snapshot = await getDocs(waitlistRef);
+        setWaitlistCount(snapshot.size + 200);
       } catch (error) {
-        setWaitlistCount(0);
+        setWaitlistCount(200);
       }
     };
     fetchCount();
@@ -62,7 +64,7 @@ export default function SocialProof() {
     <section className="relative py-24 px-4 overflow-hidden">
       {/* Background */}
       <div className="absolute inset-0 bg-gradient-to-b from-[#1A0B2E] via-[#0F0514] to-[#1A0B2E]" />
-      
+
       {/* Glow */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-pink-600/20 rounded-full blur-[150px]" />
 
@@ -93,7 +95,7 @@ export default function SocialProof() {
 
           <motion.h2 className="text-4xl md:text-5xl font-black text-white mb-4">
             Join{' '}
-            <motion.span 
+            <motion.span
               key={displayCount}
               initial={{ scale: 1.2, color: '#FBBF24' }}
               animate={{ scale: 1, color: '#FFFFFF' }}
@@ -122,7 +124,7 @@ export default function SocialProof() {
             >
               {/* Glow */}
               <div className="absolute inset-0 bg-gradient-to-br from-purple-600/50 to-pink-600/50 rounded-2xl blur-xl opacity-0 group-hover:opacity-50 transition-opacity" />
-              
+
               {/* Card */}
               <div className="relative p-6 rounded-2xl bg-white/5 backdrop-blur-xl border border-white/10 hover:border-purple-500/50 transition-all duration-300 h-full">
                 {/* Stars */}

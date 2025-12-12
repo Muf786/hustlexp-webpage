@@ -1,38 +1,16 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Instagram, Zap } from 'lucide-react';
-import { addToWaitlist } from '@/firebase/waitlist';
-import { toast } from 'sonner';
-import SuccessAnimation from './SuccessAnimation';
+import { Instagram, ArrowUp } from 'lucide-react';
 
 export default function Footer() {
-  const [email, setEmail] = useState('');
-  const [phone, setPhone] = useState('');
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [showSuccess, setShowSuccess] = useState(false);
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (!email) return;
-
-    setIsSubmitting(true);
-    try {
-      await addToWaitlist({
-        email,
-        name: "",
-        source: "footer",
-        referral_code: "",
-        referred_by: ""
-      });
-
-      setShowSuccess(true);
-      setEmail("");
-    } catch (error) {
-      toast.error("Error joining waitlist.");
+  const scrollToHero = () => {
+    const hero = document.getElementById('hero');
+    if (hero) {
+      hero.scrollIntoView({ behavior: 'smooth' });
+    } else {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
-    setIsSubmitting(false);
   };
 
   const socialLinks = [
@@ -65,39 +43,35 @@ export default function Footer() {
               Join the waitlist and be among the first to experience the future of gig work
             </p>
 
-            <form onSubmit={handleSubmit} className="max-w-md mx-auto space-y-3">
-              <div className="flex gap-3">
-                <div className="relative flex-1 group">
-                  <div className="absolute inset-0 bg-gradient-to-r from-purple-600 to-pink-600 rounded-lg blur-xl opacity-0 group-hover:opacity-30 transition-opacity" />
-                  <Input
-                    type="email"
-                    placeholder="Enter your email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    required
-                    className="relative h-12 bg-white/5 backdrop-blur-xl border-white/10 text-white placeholder:text-white/40"
-                  />
-                </div>
-                <div className="relative flex-1 group">
-                  <div className="absolute inset-0 bg-gradient-to-r from-purple-600 to-pink-600 rounded-lg blur-xl opacity-0 group-hover:opacity-30 transition-opacity" />
-                  <Input
-                    type="tel"
-                    placeholder="Phone number"
-                    value={phone}
-                    onChange={(e) => setPhone(e.target.value)}
-                    required
-                    className="relative h-12 bg-white/5 backdrop-blur-xl border-white/10 text-white placeholder:text-white/40"
-                  />
-                </div>
-              </div>
+            <motion.div
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              className="max-w-md mx-auto"
+            >
               <Button
-                type="submit"
-                disabled={isSubmitting}
-                className="w-full h-12 px-6 bg-gradient-to-r from-purple-600 to-amber-500 hover:from-purple-500 hover:to-amber-400 text-white font-bold"
+                onClick={scrollToHero}
+                className="relative w-full h-14 px-8 bg-gradient-to-r from-purple-600 to-amber-500 hover:from-purple-500 hover:to-amber-400 text-white font-bold text-lg rounded-full shadow-2xl group overflow-hidden"
               >
-                {isSubmitting ? 'Joining...' : 'Join Waitlist'}
+                <motion.div
+                  animate={{
+                    boxShadow: [
+                      '0 0 20px rgba(168, 85, 247, 0.5)',
+                      '0 0 40px rgba(251, 191, 36, 0.8)',
+                      '0 0 20px rgba(168, 85, 247, 0.5)'
+                    ]
+                  }}
+                  transition={{ duration: 2, repeat: Infinity }}
+                  className="absolute inset-0"
+                />
+                <span className="relative z-10 flex items-center justify-center gap-2">
+                  Create Account & Join Waitlist
+                  <ArrowUp className="w-5 h-5" />
+                </span>
               </Button>
-            </form>
+              <p className="mt-4 text-sm text-white/40">
+                Create your account to unlock Founder Badges ✨
+              </p>
+            </motion.div>
           </motion.div>
 
           {/* Social Links */}
@@ -163,9 +137,6 @@ export default function Footer() {
           </motion.div>
         </div>
       </footer>
-
-      {/* Success Animation */}
-      <SuccessAnimation isVisible={showSuccess} onClose={() => setShowSuccess(false)} />
     </>
   );
 }

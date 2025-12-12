@@ -176,48 +176,59 @@ export default function Hero() {
                 ))}
               </motion.div>
 
-              {/* Waitlist Form */}
+              {/* Account Creation Form */}
               <motion.div
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, delay: 1 }}
-                className="max-w-xl mx-auto"
+                className="max-w-md mx-auto bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-6 shadow-2xl"
               >
-                <form onSubmit={handleSubmit} className="space-y-3">
-                  <div className="flex flex-col gap-3">
+                <div className="text-center mb-6">
+                  <h2 className="text-xl font-bold text-white mb-2">Create Your HustleXP Account</h2>
+                  <p className="text-sm text-white/60">
+                    Join the waitlist to unlock early access, earn pre-launch XP bonuses, and reserve your spot in the Seattle Beta.
+                  </p>
+                </div>
+
+                <form onSubmit={handleSubmit} className="space-y-4">
+                  <div className="space-y-3">
+                    {/* Full Name */}
                     <div className="relative group">
                       <div className="absolute inset-0 bg-gradient-to-r from-purple-600 to-pink-600 rounded-lg blur-xl opacity-0 group-hover:opacity-30 group-focus-within:opacity-30 transition-opacity" />
                       <Input
                         type="text"
-                        placeholder="Your name (optional)"
+                        placeholder="Full Name"
                         value={name}
                         onChange={(e) => setName(e.target.value)}
-                        className="relative h-14 bg-white/5 backdrop-blur-xl border-white/10 text-white placeholder:text-white/40 focus:border-purple-500 transition-colors"
+                        required
+                        className="relative h-12 bg-black/20 backdrop-blur-xl border-white/10 text-white placeholder:text-white/40 focus:border-purple-500 transition-colors"
                       />
                     </div>
-                    <div className="flex flex-col sm:flex-row gap-3">
-                      <div className="relative flex-1 group">
-                        <div className="absolute inset-0 bg-gradient-to-r from-purple-600 to-pink-600 rounded-lg blur-xl opacity-0 group-hover:opacity-30 group-focus-within:opacity-30 transition-opacity" />
-                        <Input
-                          type="email"
-                          placeholder="Your email address"
-                          value={email}
-                          onChange={(e) => setEmail(e.target.value)}
-                          required
-                          className="relative h-14 bg-white/5 backdrop-blur-xl border-white/10 text-white placeholder:text-white/40 focus:border-purple-500 transition-colors"
-                        />
-                      </div>
-                      <div className="relative flex-1 group">
-                        <div className="absolute inset-0 bg-gradient-to-r from-purple-600 to-pink-600 rounded-lg blur-xl opacity-0 group-hover:opacity-30 group-focus-within:opacity-30 transition-opacity" />
-                        <Input
-                          type="tel"
-                          placeholder="Your phone number"
-                          value={phone}
-                          onChange={(e) => setPhone(e.target.value)}
-                          required
-                          className="relative h-14 bg-white/5 backdrop-blur-xl border-white/10 text-white placeholder:text-white/40 focus:border-purple-500 transition-colors"
-                        />
-                      </div>
+
+                    {/* Email */}
+                    <div className="relative group">
+                      <div className="absolute inset-0 bg-gradient-to-r from-purple-600 to-pink-600 rounded-lg blur-xl opacity-0 group-hover:opacity-30 group-focus-within:opacity-30 transition-opacity" />
+                      <Input
+                        type="email"
+                        placeholder="Email Address"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        required
+                        className="relative h-12 bg-black/20 backdrop-blur-xl border-white/10 text-white placeholder:text-white/40 focus:border-purple-500 transition-colors"
+                      />
+                    </div>
+
+                    {/* Phone */}
+                    <div className="relative group">
+                      <div className="absolute inset-0 bg-gradient-to-r from-purple-600 to-pink-600 rounded-lg blur-xl opacity-0 group-hover:opacity-30 group-focus-within:opacity-30 transition-opacity" />
+                      <Input
+                        type="tel"
+                        placeholder="Phone Number"
+                        value={phone}
+                        onChange={(e) => setPhone(e.target.value)}
+                        required
+                        className="relative h-12 bg-black/20 backdrop-blur-xl border-white/10 text-white placeholder:text-white/40 focus:border-purple-500 transition-colors"
+                      />
                     </div>
                   </div>
 
@@ -240,17 +251,17 @@ export default function Hero() {
                         className="absolute inset-0"
                       />
                       <span className="relative z-10 flex items-center justify-center gap-2">
-                        {isSubmitting ? 'Joining...' : 'Join Waitlist'}
+                        {isSubmitting ? 'Creating Account...' : 'Create Account & Join Waitlist'}
                         <Zap className="w-5 h-5" />
                       </span>
                       <div className="absolute inset-0 bg-gradient-to-r from-amber-400 to-pink-500 opacity-0 group-hover:opacity-100 transition-opacity" />
                     </Button>
                   </motion.div>
-                </form>
 
-                <p className="mt-4 text-sm text-white/50 text-center">
-                  Be among the first 1,000 to earn <span className="text-amber-400 font-semibold">Founder Badges</span> ✨
-                </p>
+                  <p className="text-xs text-white/30 text-center mt-2">
+                    Your information is encrypted and protected. No spam — ever.
+                  </p>
+                </form>
               </motion.div>
 
               {/* Animated Stats */}

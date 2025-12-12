@@ -1,50 +1,26 @@
 import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
-import { useAuth } from './AuthContext';
-import { base44 } from '@/api/base44Client';
-import { pagesConfig } from '@/pages.config';
+
+// Simplified Navigation Tracker for HustleXP
+// Tracks page views without external SDK
+
+function useNavigationTracking() {
+    const location = useLocation();
+
+    useEffect(() => {
+        const pageName = location.pathname === '/' ? 'home' : location.pathname.replace(/^\//, '');
+
+        // Log navigation for analytics (can integrate with your own analytics later)
+        console.log(`[HustleXP] Page view: ${pageName}`);
+
+        // You can add Firebase Analytics here if needed:
+        // import { logEvent } from 'firebase/analytics';
+        // logEvent(analytics, 'page_view', { page_name: pageName });
+
+    }, [location.pathname]);
+}
 
 export default function NavigationTracker() {
-    const location = useLocation();
-    const { isAuthenticated } = useAuth();
-    const { Pages, mainPage } = pagesConfig;
-    const mainPageKey = mainPage ?? Object.keys(Pages)[0];
-
-    // Post navigation changes to parent window
-    useEffect(() => {
-        window.parent?.postMessage({
-            type: "app_changed_url",
-            url: window.location.href
-        }, '*');
-    }, [location]);
-
-    // Log user activity when navigating to a page
-    useEffect(() => {
-        // Extract page name from pathname
-        const pathname = location.pathname;
-        let pageName;
-        
-        if (pathname === '/' || pathname === '') {
-            pageName = mainPageKey;
-        } else {
-            // Remove leading slash and get the first segment
-            const pathSegment = pathname.replace(/^\//, '').split('/')[0];
-            
-            // Try case-insensitive lookup in Pages config
-            const pageKeys = Object.keys(Pages);
-            const matchedKey = pageKeys.find(
-                key => key.toLowerCase() === pathSegment.toLowerCase()
-            );
-            
-            pageName = matchedKey || null;
-        }
-
-        if (isAuthenticated && pageName) {
-            base44.appLogs.logUserInApp(pageName).catch(() => {
-                // Silently fail - logging shouldn't break the app
-            });
-        }
-    }, [location, isAuthenticated, Pages, mainPageKey]);
-
+    useNavigationTracking();
     return null;
 }

@@ -1,9 +1,6 @@
-import { base44 } from './base44Client';
+// HustleXP Entities
+// Placeholder for future entity definitions
+// Waitlist is handled via Firebase Firestore directly
 
-
-export const Query = base44.entities.Query;
-
-
-
-// auth sdk:
-export const User = base44.auth;
+export const Query = {};
+export const User = {};

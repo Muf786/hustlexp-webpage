@@ -2,7 +2,8 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Trophy, Medal, Award, Crown, TrendingUp, Zap } from 'lucide-react';
-import { base44 } from '@/api/base44Client';
+import { db } from '@/firebase/config';
+import { collection, getDocs, query, orderBy, limit } from 'firebase/firestore';
 
 export default function Leaderboard() {
   const [topReferrers, setTopReferrers] = useState([]);
@@ -11,8 +12,11 @@ export default function Leaderboard() {
   useEffect(() => {
     const fetchLeaderboard = async () => {
       try {
-        const waitlist = await base44.entities.Waitlist.list('-referral_count', 10);
-        setTopReferrers(waitlist.filter(user => (user.referral_count || 0) > 0).slice(0, 5));
+        const waitlistRef = collection(db, 'waitlist');
+        const q = query(waitlistRef, orderBy('referral_count', 'desc'), limit(10));
+        const snapshot = await getDocs(q);
+        const users = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        setTopReferrers(users.filter(user => (user.referral_count || 0) > 0).slice(0, 5));
       } catch (error) {
         console.error('Error fetching leaderboard:', error);
       }
@@ -22,7 +26,7 @@ export default function Leaderboard() {
   }, []);
 
   const getRankIcon = (rank) => {
-    switch(rank) {
+    switch (rank) {
       case 1: return { Icon: Trophy, color: 'text-amber-400' };
       case 2: return { Icon: Medal, color: 'text-gray-400' };
       case 3: return { Icon: Award, color: 'text-orange-400' };
@@ -31,7 +35,7 @@ export default function Leaderboard() {
   };
 
   const getRankGradient = (rank) => {
-    switch(rank) {
+    switch (rank) {
       case 1: return 'from-amber-400 to-yellow-600';
       case 2: return 'from-gray-400 to-gray-600';
       case 3: return 'from-orange-400 to-orange-600';
@@ -47,14 +51,14 @@ export default function Leaderboard() {
     <section className="relative py-24 px-4 overflow-hidden">
       {/* Background */}
       <div className="absolute inset-0 bg-gradient-to-b from-[#0F0514] via-[#1A0B2E] to-[#0F0514]" />
-      
+
       {/* XP Heatmap Waves */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         {[...Array(5)].map((_, i) => (
           <motion.div
             key={`wave-${i}`}
             initial={{ opacity: 0, y: 100 }}
-            animate={{ 
+            animate={{
               opacity: [0, 0.15, 0],
               y: [100, -100],
             }}
@@ -82,7 +86,7 @@ export default function Leaderboard() {
           className="absolute inset-0"
         />
       </div>
-      
+
       {/* Glow */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-amber-600/20 rounded-full blur-[150px]" />
 
@@ -127,21 +131,19 @@ export default function Leaderboard() {
               >
                 {/* Glow Effect */}
                 <div className={`absolute inset-0 bg-gradient-to-r ${gradient} rounded-2xl blur-xl opacity-0 group-hover:opacity-40 transition-opacity`} />
-                
+
                 {/* Card */}
-                <div className={`relative p-6 rounded-2xl backdrop-blur-xl border transition-all ${
-                  rank <= 3 
-                    ? 'bg-white/10 border-white/20' 
+                <div className={`relative p-6 rounded-2xl backdrop-blur-xl border transition-all ${rank <= 3
+                    ? 'bg-white/10 border-white/20'
                     : 'bg-white/5 border-white/10'
-                }`}>
+                  }`}>
                   <div className="flex items-center gap-4">
                     {/* Rank Badge */}
                     <motion.div
                       whileHover={{ rotate: 360 }}
                       transition={{ duration: 0.5 }}
-                      className={`w-14 h-14 rounded-full bg-gradient-to-br ${gradient} flex items-center justify-center font-black text-white text-xl shadow-lg ${
-                        rank === 1 ? 'ring-4 ring-amber-400/50' : ''
-                      }`}
+                      className={`w-14 h-14 rounded-full bg-gradient-to-br ${gradient} flex items-center justify-center font-black text-white text-xl shadow-lg ${rank === 1 ? 'ring-4 ring-amber-400/50' : ''
+                        }`}
                     >
                       {rank}
                     </motion.div>

@@ -1,24 +1,11 @@
-import { base44 } from './base44Client';
+// HustleXP Integrations
+// Placeholder for future integrations (email, SMS, etc.)
+// Can integrate with your own services later
 
-
-
-
-export const Core = base44.integrations.Core;
-
-export const InvokeLLM = base44.integrations.Core.InvokeLLM;
-
-export const SendEmail = base44.integrations.Core.SendEmail;
-
-export const SendSMS = base44.integrations.Core.SendSMS;
-
-export const UploadFile = base44.integrations.Core.UploadFile;
-
-export const GenerateImage = base44.integrations.Core.GenerateImage;
-
-export const ExtractDataFromUploadedFile = base44.integrations.Core.ExtractDataFromUploadedFile;
-
-
-
-
-
-
+export const Core = {};
+export const InvokeLLM = async () => { throw new Error('Not implemented'); };
+export const SendEmail = async () => { throw new Error('Not implemented'); };
+export const SendSMS = async () => { throw new Error('Not implemented'); };
+export const UploadFile = async () => { throw new Error('Not implemented'); };
+export const GenerateImage = async () => { throw new Error('Not implemented'); };
+export const ExtractDataFromUploadedFile = async () => { throw new Error('Not implemented'); };

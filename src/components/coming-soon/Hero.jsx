@@ -2,15 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Gamepad2, Bot, DollarSign, Sparkles, Zap, TrendingUp } from 'lucide-react';
 import { addToWaitlist } from '@/firebase/waitlist';
 import { toast } from 'sonner';
 import SuccessAnimation from './SuccessAnimation';
 import ReferralPortal from './ReferralPortal';
 import CountdownTimer from './CountdownTimer';
-import PhoneMockup from './PhoneMockup';
-import { playClickSound, playSuccessSound } from './AudioSystem';
-import DynamicGrid from './DynamicGrid';
+import logo from '@/assets/logo.png';
 
 export default function Hero() {
   const [email, setEmail] = useState('');
@@ -19,12 +16,12 @@ export default function Hero() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
   const [showReferral, setShowReferral] = useState(false);
-  const [userData, setUserData] = useState(null);
+
+  // Keep referral logic but simplify UI
   const [referredBy, setReferredBy] = useState(null);
-  const [gridTrigger, setGridTrigger] = useState(0);
+  const [userData, setUserData] = useState(null);
 
   useEffect(() => {
-    // Check for referral code in URL
     const urlParams = new URLSearchParams(window.location.search);
     const refCode = urlParams.get('ref');
     if (refCode) {
@@ -34,7 +31,7 @@ export default function Hero() {
 
   const generateReferralCode = (email) => {
     return email.split('@')[0].toLowerCase().replace(/[^a-z0-9]/g, '') +
-           Math.random().toString(36).substring(2, 6);
+      Math.random().toString(36).substring(2, 6);
   };
 
   const handleSubmit = async (e) => {
@@ -44,22 +41,28 @@ export default function Hero() {
     setIsSubmitting(true);
     try {
       const referralCode = generateReferralCode(email);
-
-      await addToWaitlist({
+      const data = {
         email,
         name,
         phone,
         source: referredBy ? "referral" : "hero",
         referral_code: referralCode,
         referred_by: referredBy
-      });
+      }
+
+      await addToWaitlist(data);
+
+      // Store for referral portal
+      setUserData(data);
 
       setShowSuccess(true);
-      playSuccessSound();
       setEmail("");
       setName("");
+      setPhone("");
+      toast.success("You have been added to the waitlist.");
     } catch (error) {
-      toast.error("Error joining waitlist. Try again.");
+      console.error(error);
+      toast.error("Error joining waitlist. Please try again.");
     }
     setIsSubmitting(false);
   };
@@ -69,238 +72,114 @@ export default function Hero() {
     setShowReferral(true);
   };
 
-  const badges = [
-    { icon: Gamepad2, text: 'Gamified Tasks', color: 'from-purple-500 to-pink-500' },
-    { icon: Bot, text: 'AI Matching', color: 'from-amber-500 to-orange-500' },
-    { icon: DollarSign, text: 'Instant Payouts', color: 'from-green-500 to-emerald-500' }
-  ];
-
   return (
-    <>
-      <section className="relative min-h-screen flex items-center justify-center px-4 py-20 overflow-hidden">
-        {/* Gradient Background */}
-        <div className="absolute inset-0 bg-gradient-to-b from-[#0F0514] via-[#1A0B2E] to-[#0F0514]" />
+    <section className="relative w-full min-h-screen bg-[#020617] text-white flex flex-col items-center justify-center p-6 overflow-hidden">
 
-        {/* Dynamic Grid */}
-        <DynamicGrid trigger={gridTrigger} />
+      {/* Background Glow */}
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[500px] bg-gradient-to-b from-indigo-500/10 to-transparent pointer-events-none" />
 
-        {/* Glow Effects */}
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-purple-600/20 rounded-full blur-[120px] animate-pulse" />
-        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-amber-500/20 rounded-full blur-[120px] animate-pulse" style={{ animationDelay: '1s' }} />
+      <div className="relative z-10 w-full max-w-2xl mx-auto flex flex-col items-center text-center">
 
-        {referredBy && (
-          <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="absolute top-4 left-1/2 -translate-x-1/2 z-20 px-6 py-3 bg-gradient-to-r from-purple-600/30 to-amber-600/30 backdrop-blur-xl border border-white/20 rounded-full"
-          >
-            <p className="text-white text-sm font-semibold flex items-center gap-2">
-              <Sparkles className="w-4 h-4 text-amber-400" />
-              You've been invited! Both you and your friend earn +25 XP
-            </p>
-          </motion.div>
-        )}
-
-        <div className="relative z-10 max-w-4xl mx-auto">
-          <div className="flex flex-col items-center">
-            {/* Main Content */}
-            <div className="text-center w-full">
-              {/* Badge */}
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8 }}
-                className="inline-flex items-center gap-2 px-4 py-2 mb-8 rounded-full bg-white/5 backdrop-blur-xl border border-white/10"
-              >
-                <Sparkles className="w-4 h-4 text-amber-400" />
-                <span className="text-sm text-white/90">Launching Seattle 2026</span>
-              </motion.div>
-
-              {/* Main Headline */}
-              <motion.h1
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: 0.2 }}
-                className="text-5xl md:text-6xl lg:text-7xl font-black mb-6 leading-tight"
-              >
-                <span className="bg-gradient-to-r from-purple-400 via-pink-400 to-amber-400 bg-clip-text text-transparent animate-gradient">
-                  Level Up Your Hustle
-                </span>
-              </motion.h1>
-
-              {/* Subheadline */}
-              <motion.p
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: 0.4 }}
-                className="text-lg md:text-xl text-white/70 mb-8 leading-relaxed"
-              >
-                AI-powered gig marketplace meets RPG. Get anything done, earn XP, and climb the leaderboards.
-              </motion.p>
-
-              {/* Countdown Timer */}
-              <motion.div
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: 0.5 }}
-                className="mb-8"
-              >
-                <p className="text-white/60 text-sm mb-4 uppercase tracking-wider">Launch Countdown</p>
-                <CountdownTimer />
-              </motion.div>
-
-              {/* Floating Badges */}
-              <motion.div
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: 0.6 }}
-                className="flex flex-wrap justify-center gap-3 mb-8"
-              >
-                {badges.map((badge, index) => (
-                  <motion.div
-                    key={badge.text}
-                    initial={{ opacity: 0, scale: 0.8 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{ duration: 0.5, delay: 0.8 + index * 0.1 }}
-                    whileHover={{ scale: 1.05, y: -5 }}
-                    whileTap={{ scale: 0.95 }}
-                    onTap={playClickSound}
-                    className="group relative cursor-pointer"
-                  >
-                    <div className={`absolute inset-0 bg-gradient-to-r ${badge.color} rounded-xl blur-xl opacity-50 group-hover:opacity-75 transition-opacity`} />
-                    <div className="relative px-5 py-2.5 rounded-xl bg-white/5 backdrop-blur-xl border border-white/10 flex items-center gap-2">
-                      <badge.icon className="w-4 h-4 text-white" />
-                      <span className="text-white text-sm font-medium">{badge.text}</span>
-                    </div>
-                  </motion.div>
-                ))}
-              </motion.div>
-
-              {/* Account Creation Form */}
-              <motion.div
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: 1 }}
-                className="max-w-md mx-auto bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-6 shadow-2xl"
-              >
-                <div className="text-center mb-6">
-                  <h2 className="text-xl font-bold text-white mb-2">Create Your HustleXP Account</h2>
-                  <p className="text-sm text-white/60">
-                    Join the waitlist to unlock early access, earn pre-launch XP bonuses, and reserve your spot in the Seattle Beta.
-                  </p>
-                </div>
-
-                <form onSubmit={handleSubmit} className="space-y-4">
-                  <div className="space-y-3">
-                    {/* Full Name */}
-                    <div className="relative group">
-                      <div className="absolute inset-0 bg-gradient-to-r from-purple-600 to-pink-600 rounded-lg blur-xl opacity-0 group-hover:opacity-30 group-focus-within:opacity-30 transition-opacity" />
-                      <Input
-                        type="text"
-                        placeholder="Full Name"
-                        value={name}
-                        onChange={(e) => setName(e.target.value)}
-                        required
-                        className="relative h-12 bg-black/20 backdrop-blur-xl border-white/10 text-white placeholder:text-white/40 focus:border-purple-500 transition-colors"
-                      />
-                    </div>
-
-                    {/* Email */}
-                    <div className="relative group">
-                      <div className="absolute inset-0 bg-gradient-to-r from-purple-600 to-pink-600 rounded-lg blur-xl opacity-0 group-hover:opacity-30 group-focus-within:opacity-30 transition-opacity" />
-                      <Input
-                        type="email"
-                        placeholder="Email Address"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        required
-                        className="relative h-12 bg-black/20 backdrop-blur-xl border-white/10 text-white placeholder:text-white/40 focus:border-purple-500 transition-colors"
-                      />
-                    </div>
-
-                    {/* Phone */}
-                    <div className="relative group">
-                      <div className="absolute inset-0 bg-gradient-to-r from-purple-600 to-pink-600 rounded-lg blur-xl opacity-0 group-hover:opacity-30 group-focus-within:opacity-30 transition-opacity" />
-                      <Input
-                        type="tel"
-                        placeholder="Phone Number"
-                        value={phone}
-                        onChange={(e) => setPhone(e.target.value)}
-                        required
-                        className="relative h-12 bg-black/20 backdrop-blur-xl border-white/10 text-white placeholder:text-white/40 focus:border-purple-500 transition-colors"
-                      />
-                    </div>
-                  </div>
-
-                  <motion.div whileTap={{ scale: 0.98 }}>
-                    <Button
-                      type="submit"
-                      disabled={isSubmitting}
-                      onClick={playClickSound}
-                      className="relative w-full h-14 px-8 bg-gradient-to-r from-purple-600 to-amber-500 hover:from-purple-500 hover:to-amber-400 text-white font-bold text-lg rounded-lg overflow-hidden group"
-                    >
-                      <motion.div
-                        animate={{
-                          boxShadow: [
-                            '0 0 20px rgba(168, 85, 247, 0.5)',
-                            '0 0 40px rgba(251, 191, 36, 0.8)',
-                            '0 0 20px rgba(168, 85, 247, 0.5)'
-                          ]
-                        }}
-                        transition={{ duration: 2, repeat: Infinity }}
-                        className="absolute inset-0"
-                      />
-                      <span className="relative z-10 flex items-center justify-center gap-2">
-                        {isSubmitting ? 'Creating Account...' : 'Create Account & Join Waitlist'}
-                        <Zap className="w-5 h-5" />
-                      </span>
-                      <div className="absolute inset-0 bg-gradient-to-r from-amber-400 to-pink-500 opacity-0 group-hover:opacity-100 transition-opacity" />
-                    </Button>
-                  </motion.div>
-
-                  <p className="text-xs text-white/30 text-center mt-2">
-                    Your information is encrypted and protected. No spam — ever.
-                  </p>
-                </form>
-              </motion.div>
-
-              {/* Animated Stats */}
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 1, delay: 1.2 }}
-                className="mt-8 flex flex-wrap justify-center gap-6 text-white/60"
-              >
-                <div className="flex items-center gap-2">
-                  <TrendingUp className="w-5 h-5 text-green-400" />
-                  <span className="text-sm">AI-Powered</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Gamepad2 className="w-5 h-5 text-purple-400" />
-                  <span className="text-sm">RPG Mechanics</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Sparkles className="w-5 h-5 text-amber-400" />
-                  <span className="text-sm">Built Different</span>
-                </div>
-              </motion.div>
-            </div>
+        {/* Logo */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.7 }}
+          className="mb-8"
+        >
+          {/* Logo container ensures blending */}
+          <div className="p-4 rounded-3xl bg-[#020617] inline-block shadow-2xl shadow-indigo-500/10 border border-white/5">
+            <img src={logo} alt="HustleXP Logo" className="h-24 w-auto object-contain mx-auto" />
           </div>
-        </div>
+        </motion.div>
 
-        <style jsx>{`
-          @keyframes gradient {
-            0%, 100% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-          }
-          .animate-gradient {
-            background-size: 200% 200%;
-            animation: gradient 3s ease infinite;
-          }
-        `}</style>
-      </section>
+        {/* Brand Name - Refined */}
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7, delay: 0.1 }}
+          className="mb-10"
+        >
+          <span className="text-sm font-semibold tracking-[0.3em] text-indigo-300/80 uppercase">
+            HustleXP
+          </span>
+        </motion.div>
 
-      {/* Success Animation */}
+        {/* Countdown */}
+        <CountdownTimer />
+
+        {/* Headline */}
+        <motion.h1
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7, delay: 0.2 }}
+          className="text-4xl md:text-7xl font-semibold tracking-tight mb-6 bg-gradient-to-b from-white to-white/70 bg-clip-text text-transparent pb-2"
+        >
+          Earning on your terms.
+        </motion.h1>
+
+        {/* Subcopy */}
+        <motion.p
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7, delay: 0.3 }}
+          className="text-xl md:text-2xl text-slate-400 mb-12 max-w-lg font-light"
+        >
+          The professional marketplace for local tasks. <br className="hidden md:block" /> Connect with opportunities clearly on HustleXP.
+        </motion.p>
+
+        {/* Form */}
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7, delay: 0.4 }}
+          className="w-full max-w-md"
+        >
+          <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+            <div className="space-y-3">
+              <Input
+                type="text"
+                placeholder="Full Name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                required
+                className="h-12 bg-white/5 border-white/10 text-white placeholder:text-white/30 focus:border-indigo-500/50 transition-all rounded-lg text-base"
+              />
+              <Input
+                type="tel"
+                placeholder="Phone Number"
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+                required
+                className="h-12 bg-white/5 border-white/10 text-white placeholder:text-white/30 focus:border-indigo-500/50 transition-all rounded-lg text-base"
+              />
+              <Input
+                type="email"
+                placeholder="work@email.com"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                className="h-12 bg-white/5 border-white/10 text-white placeholder:text-white/30 focus:border-indigo-500/50 transition-all rounded-lg text-base"
+              />
+            </div>
+
+            <Button
+              type="submit"
+              disabled={isSubmitting}
+              className="h-12 w-full text-base font-medium bg-indigo-600 hover:bg-indigo-500 text-white border-0 transition-all shadow-[0_0_20px_rgba(79,70,229,0.3)] hover:shadow-[0_0_30px_rgba(79,70,229,0.5)] rounded-lg mt-2"
+            >
+              {isSubmitting ? 'Processing...' : 'Join Waitlist'}
+            </Button>
+
+            <p className="text-xs text-slate-500 mt-6 font-medium tracking-wide uppercase">
+              Launching Seattle 2026
+            </p>
+          </form>
+        </motion.div>
+      </div>
+
+      {/* Success & Referral Modals - Keep functionality but ensure style matches if possible */}
+      {/* (SuccessAnimation might need a tweak internally to not be too flashy, but logic is here) */}
       <SuccessAnimation
         isVisible={showSuccess}
         onClose={() => {
@@ -310,7 +189,6 @@ export default function Hero() {
         onComplete={handleSuccessComplete}
       />
 
-      {/* Referral Portal */}
       {showReferral && userData && (
         <ReferralPortal
           userEmail={userData.email}
@@ -319,6 +197,6 @@ export default function Hero() {
           onClose={() => setShowReferral(false)}
         />
       )}
-    </>
+    </section>
   );
 }

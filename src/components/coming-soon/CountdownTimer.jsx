@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 
 export default function CountdownTimer() {
-  const launchDate = new Date('2026-01-01T00:00:00').getTime();
+  // Extended to the end of January 2026
+  const launchDate = new Date('2026-02-01T00:00:00').getTime();
   const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
 
   useEffect(() => {

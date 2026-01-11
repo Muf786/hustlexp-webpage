@@ -21,11 +21,11 @@ export default function CountdownTimer() {
   }, [launchDate]);
 
   const TimeUnit = ({ value, label }) => (
-    <div className="flex flex-col items-center mx-2 md:mx-4">
-      <span className="text-3xl md:text-5xl font-light tracking-tight text-white mb-2">
+    <div className="flex flex-col items-center justify-center px-4 py-3 md:px-6 md:py-4 rounded-2xl border border-white/10 bg-white/5 shadow-[0_0_25px_rgba(15,23,42,0.6)]">
+      <span className="text-3xl md:text-5xl font-semibold tracking-tight text-white font-display">
         {String(value).padStart(2, '0')}
       </span>
-      <span className="text-xs text-white/40 uppercase tracking-widest font-medium">
+      <span className="text-[10px] md:text-xs text-white/40 uppercase tracking-[0.4em] font-medium mt-2">
         {label}
       </span>
     </div>
@@ -33,17 +33,14 @@ export default function CountdownTimer() {
 
   return (
     <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.8, delay: 0.5 }}
-      className="flex justify-center items-start mb-10"
+      className="flex flex-wrap justify-center items-center gap-3 md:gap-4"
     >
       <TimeUnit value={timeLeft.days} label="Days" />
-      <span className="text-3xl md:text-5xl font-light text-white/20 -mt-1">:</span>
       <TimeUnit value={timeLeft.hours} label="Hours" />
-      <span className="text-3xl md:text-5xl font-light text-white/20 -mt-1">:</span>
       <TimeUnit value={timeLeft.minutes} label="Mins" />
-      <span className="text-3xl md:text-5xl font-light text-white/20 -mt-1">:</span>
       <TimeUnit value={timeLeft.seconds} label="Secs" />
     </motion.div>
   );

@@ -7,28 +7,24 @@ export default function Features() {
     {
       icon: Briefcase,
       title: 'Flexible Opportunities',
-      description: 'Access a wide variety of tasks and gigs in your area. filter by skill, location, and pay.',
+      description: 'Filter by skill, location, and pay to find work that actually fits your calendar.',
     },
     {
       icon: Bot,
       title: 'Smart Matching',
-      description: 'Our system learns your preferences and skills to recommend the best opportunities for you.',
+      description: 'An intelligent signal engine surfaces the most relevant gigs before anyone else sees them.',
     },
     {
       icon: DollarSign,
       title: 'Fast & Secure Payments',
-      description: 'Get paid directly to your bank account or debit card. No hidden fees or delays.',
+      description: 'Automatic payouts with clear fees and instant status updates, built for trust.',
     }
   ];
 
   return (
-    <section className="relative py-24 px-4 bg-[#020617] border-t border-white/5 overflow-hidden">
-
-      {/* Subtle Grid Background */}
-      <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:40px_40px] pointer-events-none" />
-
-      {/* Radial Gradient for depth */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full bg-gradient-to-b from-indigo-500/5 via-transparent to-transparent pointer-events-none" />
+    <section className="relative py-28 px-4 bg-[#05060a] border-t border-white/10 overflow-hidden">
+      <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:80px_80px] opacity-40 pointer-events-none" />
+      <div className="absolute -top-32 right-0 h-72 w-72 rounded-full bg-cyan-400/10 blur-[140px] pointer-events-none" />
 
       <div className="relative z-10 max-w-6xl mx-auto">
         <motion.div
@@ -38,18 +34,18 @@ export default function Features() {
           transition={{ duration: 0.8 }}
           className="text-center mb-16"
         >
-          <span className="inline-block px-3 py-1 mb-4 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-xs font-medium text-indigo-300">
-            Why HustleXP?
+          <span className="inline-flex items-center gap-3 px-4 py-2 mb-4 rounded-full bg-white/5 border border-white/10 text-xs font-medium text-cyan-200 uppercase tracking-[0.25em]">
+            Why HustleXP
           </span>
-          <h2 className="text-3xl font-bold tracking-tight mb-4 text-white">
-            Built for the modern workforce
+          <h2 className="text-3xl md:text-5xl font-semibold tracking-tight mb-4 text-white font-display">
+            Built for a new kind of worker
           </h2>
-          <p className="text-slate-400 text-lg max-w-2xl mx-auto">
-            A simple, transparent platform connecting you with local work.
+          <p className="text-slate-300/80 text-lg max-w-2xl mx-auto">
+            A polished, transparent platform connecting you with local work without the usual chaos.
           </p>
         </motion.div>
 
-        <div className="grid md:grid-cols-3 gap-8">
+        <div className="grid lg:grid-cols-3 gap-8">
           {features.map((feature, index) => (
             <motion.div
               key={feature.title}
@@ -57,16 +53,17 @@ export default function Features() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
-              className="group bg-white/5 p-8 rounded-2xl border border-white/10 hover:border-indigo-500/30 transition-all hover:-translate-y-1"
+              className="group relative overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-b from-white/5 via-white/0 to-white/5 p-8 transition-all hover:-translate-y-2 hover:border-cyan-400/40"
             >
-              <div className="w-12 h-12 rounded-xl bg-indigo-500/10 flex items-center justify-center mb-6 group-hover:bg-indigo-500/20 transition-colors">
-                <feature.icon className="w-6 h-6 text-indigo-400" />
+              <div className="absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100 bg-[radial-gradient(circle_at_top,rgba(34,211,238,0.15),transparent_60%)]" />
+              <div className="relative w-12 h-12 rounded-2xl bg-white/10 flex items-center justify-center mb-6 group-hover:bg-cyan-400/20 transition-colors">
+                <feature.icon className="w-6 h-6 text-cyan-200" />
               </div>
 
-              <h3 className="text-xl font-semibold mb-3 text-white">
+              <h3 className="relative text-xl font-semibold mb-3 text-white font-display">
                 {feature.title}
               </h3>
-              <p className="text-slate-400 leading-relaxed">
+              <p className="relative text-slate-300/80 leading-relaxed">
                 {feature.description}
               </p>
             </motion.div>

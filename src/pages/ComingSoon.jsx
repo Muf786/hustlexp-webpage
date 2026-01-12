@@ -6,7 +6,7 @@ import Footer from '../components/coming-soon/Footer';
 
 export default function ComingSoon() {
   return (
-    <div className="relative min-h-screen bg-[#05060a] overflow-hidden">
+    <div className="relative min-h-screen bg-[#05030a] overflow-hidden">
       {/* Main Content */}
       <div className="relative z-10">
         <div id="hero">

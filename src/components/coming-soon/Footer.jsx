@@ -8,7 +8,7 @@ export default function Footer() {
   ];
 
   return (
-    <footer className="py-12 px-4 bg-[#05060a] border-t border-white/10">
+    <footer className="py-12 px-4 bg-[#05030a] border-t border-white/10">
       <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
         <div className="text-center md:text-left">
           <p className="font-semibold text-white font-display">HustleXP</p>
@@ -23,7 +23,7 @@ export default function Footer() {
               href={social.href}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-slate-400 hover:text-cyan-200 transition-colors"
+              className="text-slate-400 hover:text-violet-200 transition-colors"
               aria-label={social.label}
             >
               <social.icon className="w-5 h-5" />

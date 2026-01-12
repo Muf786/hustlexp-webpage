@@ -73,17 +73,27 @@ export default function Hero() {
   };
 
   return (
-    <section className="relative w-full min-h-screen bg-[#05060a] text-white flex flex-col items-center justify-center px-6 py-20 overflow-hidden">
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(56,189,248,0.18),transparent_55%),radial-gradient(circle_at_bottom,rgba(16,185,129,0.12),transparent_50%)] pointer-events-none" />
-      <div className="absolute inset-0 bg-[linear-gradient(120deg,rgba(255,255,255,0.04),transparent_40%,rgba(255,255,255,0.02))] pointer-events-none" />
+    <section className="relative w-full min-h-screen bg-[#05030a] text-white flex flex-col items-center justify-center px-6 py-20 overflow-hidden">
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(99,102,241,0.18),transparent_55%),radial-gradient(circle_at_bottom,rgba(168,85,247,0.14),transparent_50%)] pointer-events-none" />
+      <div className="absolute inset-0 bg-[linear-gradient(120deg,rgba(255,255,255,0.05),transparent_40%,rgba(255,255,255,0.02))] pointer-events-none" />
+      <motion.div
+        className="absolute inset-0 opacity-60 pointer-events-none"
+        animate={{ backgroundPosition: ['0% 0%', '100% 100%'] }}
+        transition={{ duration: 24, repeat: Infinity, repeatType: 'mirror', ease: 'linear' }}
+        style={{
+          backgroundImage:
+            'radial-gradient(circle at 20% 20%, rgba(139,92,246,0.18), transparent 35%), radial-gradient(circle at 80% 30%, rgba(59,130,246,0.16), transparent 40%), radial-gradient(circle at 30% 80%, rgba(217,70,239,0.16), transparent 38%)',
+          backgroundSize: '140% 140%'
+        }}
+      />
 
       <motion.div
-        className="absolute -top-24 -right-24 h-72 w-72 rounded-full bg-cyan-400/20 blur-[120px]"
+        className="absolute -top-24 -right-24 h-72 w-72 rounded-full bg-indigo-500/25 blur-[120px]"
         animate={{ y: [0, 24, -8], x: [0, -16, 6] }}
         transition={{ duration: 14, repeat: Infinity, repeatType: 'mirror', ease: 'easeInOut' }}
       />
       <motion.div
-        className="absolute -bottom-32 -left-32 h-80 w-80 rounded-full bg-emerald-400/20 blur-[140px]"
+        className="absolute -bottom-32 -left-32 h-80 w-80 rounded-full bg-fuchsia-500/20 blur-[140px]"
         animate={{ y: [0, -18, 12], x: [0, 12, -10] }}
         transition={{ duration: 16, repeat: Infinity, repeatType: 'mirror', ease: 'easeInOut' }}
       />
@@ -101,7 +111,7 @@ export default function Hero() {
                 <img src={logo} alt="HustleXP Logo" className="h-16 md:h-20 w-auto object-contain" />
               </div>
               <div className="text-left">
-                <p className="text-sm font-semibold tracking-[0.3em] text-cyan-200 uppercase">HustleXP</p>
+                <p className="text-sm font-semibold tracking-[0.3em] text-violet-200 uppercase">HustleXP</p>
                 <p className="text-xs text-white/50 tracking-[0.2em] uppercase">Seattle Beta</p>
               </div>
             </div>
@@ -111,10 +121,10 @@ export default function Hero() {
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.1 }}
-            className="inline-flex items-center gap-3 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-xs uppercase tracking-[0.25em] text-cyan-200"
+            className="inline-flex items-center gap-3 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-xs uppercase tracking-[0.25em] text-violet-200"
           >
             Now accepting early access
-            <span className="h-1 w-10 bg-gradient-to-r from-cyan-400 to-emerald-400 rounded-full" />
+            <span className="h-1 w-10 bg-gradient-to-r from-violet-400 to-fuchsia-400 rounded-full" />
           </motion.div>
 
           <motion.h1
@@ -124,7 +134,7 @@ export default function Hero() {
             className="mt-8 text-4xl md:text-6xl lg:text-7xl font-semibold tracking-tight font-display text-white"
           >
             The local work network that{' '}
-            <span className="bg-gradient-to-r from-cyan-200 via-emerald-200 to-lime-200 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-violet-200 via-fuchsia-200 to-indigo-200 bg-clip-text text-transparent">
               feels like a product.
             </span>
           </motion.h1>
@@ -146,15 +156,15 @@ export default function Hero() {
             className="mt-8 flex flex-wrap items-center justify-center lg:justify-start gap-4 text-xs uppercase tracking-[0.3em] text-white/50"
           >
             <span className="flex items-center gap-2">
-              <span className="h-2 w-2 rounded-full bg-cyan-300" />
+              <span className="h-2 w-2 rounded-full bg-violet-300" />
               Instant matching
             </span>
             <span className="flex items-center gap-2">
-              <span className="h-2 w-2 rounded-full bg-emerald-300" />
+              <span className="h-2 w-2 rounded-full bg-fuchsia-300" />
               Verified payouts
             </span>
             <span className="flex items-center gap-2">
-              <span className="h-2 w-2 rounded-full bg-lime-300" />
+              <span className="h-2 w-2 rounded-full bg-indigo-300" />
               Built for Seattle
             </span>
           </motion.div>
@@ -173,10 +183,10 @@ export default function Hero() {
           <div className="rounded-3xl border border-white/10 bg-white/5 p-8 shadow-[0_30px_80px_rgba(0,0,0,0.45)] backdrop-blur-lg">
             <div className="flex items-center justify-between mb-6">
               <div>
-                <p className="text-sm uppercase tracking-[0.3em] text-cyan-200">Early Access</p>
+                <p className="text-sm uppercase tracking-[0.3em] text-violet-200">Early Access</p>
                 <p className="text-2xl font-semibold text-white font-display">Reserve your spot</p>
               </div>
-              <div className="h-10 w-10 rounded-full bg-gradient-to-br from-cyan-400 to-emerald-400 opacity-70" />
+              <div className="h-10 w-10 rounded-full bg-gradient-to-br from-violet-400 to-fuchsia-400 opacity-70" />
             </div>
 
             <form onSubmit={handleSubmit} className="flex flex-col gap-4">
@@ -187,7 +197,7 @@ export default function Hero() {
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   required
-                  className="h-12 bg-black/20 border-white/10 text-white placeholder:text-white/40 focus:border-cyan-400/60 transition-all rounded-xl text-base"
+                  className="h-12 bg-black/20 border-white/10 text-white placeholder:text-white/40 focus:border-violet-400/60 transition-all rounded-xl text-base"
                 />
                 <Input
                   type="tel"
@@ -195,7 +205,7 @@ export default function Hero() {
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
                   required
-                  className="h-12 bg-black/20 border-white/10 text-white placeholder:text-white/40 focus:border-cyan-400/60 transition-all rounded-xl text-base"
+                  className="h-12 bg-black/20 border-white/10 text-white placeholder:text-white/40 focus:border-violet-400/60 transition-all rounded-xl text-base"
                 />
                 <Input
                   type="email"
@@ -203,14 +213,14 @@ export default function Hero() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
-                  className="h-12 bg-black/20 border-white/10 text-white placeholder:text-white/40 focus:border-cyan-400/60 transition-all rounded-xl text-base"
+                  className="h-12 bg-black/20 border-white/10 text-white placeholder:text-white/40 focus:border-violet-400/60 transition-all rounded-xl text-base"
                 />
               </div>
 
               <Button
                 type="submit"
                 disabled={isSubmitting}
-                className="h-12 w-full text-base font-semibold bg-gradient-to-r from-cyan-400 to-emerald-400 text-slate-900 border-0 transition-all shadow-[0_0_30px_rgba(34,211,238,0.35)] hover:shadow-[0_0_45px_rgba(16,185,129,0.45)] rounded-xl mt-2"
+                className="h-12 w-full text-base font-semibold bg-gradient-to-r from-violet-400 to-fuchsia-400 text-slate-900 border-0 transition-all shadow-[0_0_30px_rgba(139,92,246,0.35)] hover:shadow-[0_0_45px_rgba(217,70,239,0.45)] rounded-xl mt-2"
               >
                 {isSubmitting ? 'Processing...' : 'Join Waitlist'}
               </Button>

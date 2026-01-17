@@ -72,31 +72,11 @@ export default function Hero() {
 
   return (
     <section className="relative w-full min-h-screen bg-[#05030a] text-white flex flex-col items-center justify-center px-6 py-20 overflow-hidden">
-      {/* Background Effects */}
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(99,102,241,0.18),transparent_55%),radial-gradient(circle_at_bottom,rgba(168,85,247,0.14),transparent_50%)] pointer-events-none" />
-      <div className="absolute inset-0 bg-[linear-gradient(120deg,rgba(255,255,255,0.05),transparent_40%,rgba(255,255,255,0.02))] pointer-events-none" />
-
-      <motion.div
-        className="absolute inset-0 opacity-60 pointer-events-none"
-        animate={{ backgroundPosition: ['0% 0%', '100% 100%'] }}
-        transition={{ duration: 24, repeat: Infinity, repeatType: 'mirror', ease: 'linear' }}
-        style={{
-          backgroundImage:
-            'radial-gradient(circle at 20% 20%, rgba(139,92,246,0.18), transparent 35%), radial-gradient(circle at 80% 30%, rgba(59,130,246,0.16), transparent 40%), radial-gradient(circle at 30% 80%, rgba(217,70,239,0.16), transparent 38%)',
-          backgroundSize: '140% 140%'
-        }}
-      />
-
-      <motion.div
-        className="absolute -top-24 -right-24 h-72 w-72 rounded-full bg-indigo-500/25 blur-[120px]"
-        animate={{ y: [0, 24, -8], x: [0, -16, 6] }}
-        transition={{ duration: 14, repeat: Infinity, repeatType: 'mirror', ease: 'easeInOut' }}
-      />
-      <motion.div
-        className="absolute -bottom-32 -left-32 h-80 w-80 rounded-full bg-fuchsia-500/20 blur-[140px]"
-        animate={{ y: [0, -18, 12], x: [0, 12, -10] }}
-        transition={{ duration: 16, repeat: Infinity, repeatType: 'mirror', ease: 'easeInOut' }}
-      />
+      {/* Background */}
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(139,92,246,0.22),transparent_55%),radial-gradient(circle_at_80%_20%,rgba(167,139,250,0.18),transparent_45%),radial-gradient(circle_at_bottom,rgba(88,28,135,0.25),transparent_50%)] pointer-events-none" />
+      <div className="absolute inset-0 bg-[conic-gradient(from_210deg_at_50%_30%,rgba(255,255,255,0.06),transparent_40%,rgba(255,255,255,0.04),transparent_70%)] pointer-events-none" />
+      <div className="absolute inset-0 bg-[radial-gradient(rgba(255,255,255,0.06)_1px,transparent_1px)] [background-size:28px_28px] opacity-20 pointer-events-none" />
+      <div className="absolute inset-0 bg-gradient-to-b from-[#0b0614] via-[#05030a] to-[#020205] pointer-events-none" />
 
       <div className="relative z-10 w-full max-w-7xl mx-auto grid lg:grid-cols-2 gap-12 items-center">
         {/* Left Content */}

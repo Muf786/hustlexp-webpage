@@ -1,7 +1,9 @@
 import React from 'react';
 import Hero from '../components/coming-soon/Hero';
 import Features from '../components/coming-soon/Features';
+import CityRoadmap from '../components/coming-soon/CityRoadmap';
 import SocialProof from '../components/coming-soon/SocialProof';
+import TwitterTestimonials from '../components/coming-soon/TwitterTestimonials';
 import Footer from '../components/coming-soon/Footer';
 
 export default function ComingSoon() {
@@ -13,6 +15,8 @@ export default function ComingSoon() {
           <Hero />
         </div>
         <Features />
+        <CityRoadmap />
+        <TwitterTestimonials />
         <SocialProof />
         <Footer />
       </div>

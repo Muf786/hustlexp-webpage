@@ -70,7 +70,12 @@ module.exports = {
   					height: 'var(--radix-accordion-content-height)'
   				}
   			},
-  			'accordion-up': {
+  			'shine': {
+				'0%': { backgroundPosition: '0% 0%' },
+				'50%': { backgroundPosition: '100% 100%' },
+				'100%': { backgroundPosition: '0% 0%' }
+			},
+			'accordion-up': {
   				from: {
   					height: 'var(--radix-accordion-content-height)'
   				},
@@ -81,7 +86,8 @@ module.exports = {
   		},
   		animation: {
   			'accordion-down': 'accordion-down 0.2s ease-out',
-  			'accordion-up': 'accordion-up 0.2s ease-out'
+  			'accordion-up': 'accordion-up 0.2s ease-out',
+			'shine': 'shine var(--duration, 14s) infinite linear'
   		}
   	}
   },

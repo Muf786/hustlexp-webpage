@@ -8,7 +8,6 @@ import { addToWaitlist } from '@/firebase/waitlist';
 import { toast } from 'sonner';
 import SuccessAnimation from './SuccessAnimation';
 import ReferralPortal from './ReferralPortal';
-import CountdownTimer from './CountdownTimer';
 import logo from '@/assets/logo.png';
 
 export default function Hero() {
@@ -150,8 +149,11 @@ export default function Hero() {
             </span>
           </motion.div>
 
-          <div className="mt-10">
-            <CountdownTimer />
+          <div className="mt-10 flex items-center justify-center lg:justify-start">
+            <div className="inline-flex items-center gap-3 rounded-full border border-white/10 bg-white/5 px-5 py-3 text-xs uppercase tracking-[0.35em] text-violet-200">
+              Coming soon
+              <span className="h-1 w-10 rounded-full bg-gradient-to-r from-violet-400 to-fuchsia-400" />
+            </div>
           </div>
         </div>
 
